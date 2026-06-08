@@ -113,6 +113,15 @@
       </div>
 
       <div class="footer__copyright">
+        {%- if shop.policies != empty -%}
+          <ul class="policies list-unstyled">
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                <li><small class="copyright__content"><a href="{{ policy.url }}" class="link">{{ policy.title }}</a></small></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
         <small class="copyright__content">&copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: routes.root_url }}</small>
         <small class="copyright__content">{{ powered_by_link }}</small>
       </div>
@@ -186,7 +195,15 @@
   .footer__copyright {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 0.5rem;
+  }
+  .policies {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
   }
 </style>
 
