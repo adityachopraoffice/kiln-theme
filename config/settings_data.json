@@ -16,7 +16,7 @@
     "cart_type": "drawer"
   },
   "presets": {
-    "Default": {
+    "Kiln": {
       "color_clay_bg": "#C4714F",
       "color_clay_text": "#F5F0E8",
       "color_linen_bg": "#F5F0E8",
