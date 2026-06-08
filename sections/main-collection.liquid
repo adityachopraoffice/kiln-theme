@@ -1,0 +1,368 @@
+<div class="main-collection color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <header class="collection-header">
+      <h1 class="collection-header__title h1">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <div class="collection-header__description rte">{{ collection.description }}</div>
+      {%- endif -%}
+    </header>
+
+    <div class="collection-toolbar">
+      <div class="collection-toolbar__filters">
+        <!-- Faceted Search Placeholder (Typically requires JS to handle Shopify's filter API properly) -->
+        <details class="facets__disclosure">
+          <summary class="facets__summary caption-large focus-offset">
+            <span>Filter</span>
+          </summary>
+          <div class="facets__display">
+            {%- for filter in collection.filters -%}
+              <details class="facets__disclosure-inner">
+                <summary class="facets__summary-inner">
+                  <span>{{ filter.label }}</span>
+                </summary>
+                <div class="facets__display-inner">
+                  <ul class="facets__list list-unstyled" role="list">
+                    {%- for value in filter.values -%}
+                      <li class="list-menu__item facets__item">
+                        <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                          <input type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                            {% if value.active %}checked{% endif %}
+                            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                          >
+                          {{ value.label | escape }} ({{ value.count }})
+                        </label>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              </details>
+            {%- endfor -%}
+          </div>
+        </details>
+      </div>
+
+      <div class="collection-toolbar__sort">
+        <label for="SortBy">Sort by</label>
+        <select name="sort_by" class="facet-filters__sort select__select caption-large" id="SortBy" aria-describedby="a11y-refresh-page-message">
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value | escape }}"{% if option.value == collection.sort_by %} selected="selected"{% endif %}>
+              {{ option.name | escape }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+      
+      <div class="collection-toolbar__view">
+        <button type="button" class="view-toggle" data-view="grid" aria-label="Grid view">Grid</button>
+        <button type="button" class="view-toggle" data-view="list" aria-label="List view">List</button>
+      </div>
+    </div>
+
+    {%- if collection.products.size == 0 -%}
+      <div class="collection-empty">
+        <h2 class="h4">{{ 'collections.general.no_matches' | t }}</h2>
+      </div>
+    {%- else -%}
+      {%- paginate collection.products by section.settings.products_per_page -%}
+        <div class="collection-grid {% if section.settings.asymmetric_grid %}collection-grid--asymmetric{% endif %}" id="ProductGridContainer">
+          {%- for product in collection.products -%}
+            <div class="collection-grid__item">
+              <a href="{{ product.url }}" class="product-card">
+                <div class="product-card__image-wrapper">
+                  {%- if product.featured_media -%}
+                    <img srcset="{{ product.featured_media | image_url: width: 600 }} 1x, {{ product.featured_media | image_url: width: 1200 }} 2x"
+                      src="{{ product.featured_media | image_url: width: 600 }}"
+                      loading="lazy"
+                      width="{{ product.featured_media.width }}"
+                      height="{{ product.featured_media.height }}"
+                      alt="{{ product.featured_media.alt | default: product.title | escape }}"
+                      class="product-card__image"
+                    >
+                  {%- else -%}
+                    <div class="product-card__placeholder">
+                      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                  {%- endif -%}
+                  
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="badge badge--sale">Sale</span>
+                  {%- endif -%}
+                </div>
+                
+                <div class="product-card__info">
+                  <h3 class="h5 product-card__title">{{ product.title }}</h3>
+                  <div class="product-card__price">
+                    {%- if product.price_varies -%}
+                      {%- assign price_min_money = product.price_min | money -%}
+                      <span class="price-item">{{ 'products.product.price.from_price_html' | t: price: price_min_money }}</span>
+                    {%- else -%}
+                      <span class="price-item">{{ product.price | money }}</span>
+                    {%- endif -%}
+                    
+                    {%- if product.compare_at_price > product.price -%}
+                      <s class="price-item--sale">{{ product.compare_at_price | money }}</s>
+                    {%- endif -%}
+                    
+                    {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
+                      <div class="unit-price caption">
+                        <span>{{ product.selected_or_first_available_variant.unit_price | money }}</span>
+                        <span aria-hidden="true">/</span>
+                        <span>
+                          {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+                            {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+                          {%- endif -%}
+                          {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+                        </span>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  
+                  {%- for block in section.blocks -%}
+                    {%- case block.type -%}
+                      {%- when 'small_batch_label' -%}
+                        {%- if product.tags contains 'small batch' or product.tags contains 'Small Batch' -%}
+                          <span class="product-tag product-tag--small-batch">{{ 'products.product.small_batch' | t }}</span>
+                        {%- endif -%}
+                      {%- when 'made_to_order_label' -%}
+                        {%- if product.tags contains 'made to order' or product.tags contains 'Made to Order' -%}
+                          <span class="product-tag product-tag--made-to-order">{{ 'products.product.made_to_order' | t }}</span>
+                        {%- endif -%}
+                    {%- endcase -%}
+                  {%- endfor -%}
+                </div>
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+            <ul class="pagination__list list-unstyled" role="list">
+              {%- if paginate.previous -%}
+                <li>
+                  <a href="{{ paginate.previous.url }}" class="pagination__item pagination__item--prev" aria-label="{{ 'general.pagination.previous' | t }}">
+                    &larr; Prev
+                  </a>
+                </li>
+              {%- endif -%}
+
+              {%- for part in paginate.parts -%}
+                <li>
+                  {%- if part.is_link -%}
+                    <a href="{{ part.url }}" class="pagination__item" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+                  {%- else -%}
+                    {%- if part.title == paginate.current_page -%}
+                      <span class="pagination__item pagination__item--current" aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+                    {%- else -%}
+                      <span class="pagination__item">{{ part.title }}</span>
+                    {%- endif -%}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+
+              {%- if paginate.next -%}
+                <li>
+                  <a href="{{ paginate.next.url }}" class="pagination__item pagination__item--next" aria-label="{{ 'general.pagination.next' | t }}">
+                    Next &rarr;
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .main-collection {
+    padding: var(--section-spacing) 0;
+  }
+  .collection-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .collection-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  .collection-toolbar__sort select {
+    padding: 0.5rem;
+    border: 1px solid var(--color-foreground);
+    background: transparent;
+    color: inherit;
+  }
+  .collection-toolbar__view button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 1rem;
+  }
+  
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  @media screen and (min-width: 750px) {
+    .collection-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .collection-grid--asymmetric .collection-grid__item:nth-child(even) {
+      transform: translateY(2rem);
+    }
+  }
+
+  .product-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .product-card__image-wrapper {
+    position: relative;
+    padding-bottom: 125%; /* 4:5 aspect ratio */
+    overflow: hidden;
+    background-color: rgba(var(--color-foreground), 0.05);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  .product-card__image,
+  .product-card__placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .product-card__title {
+    margin: 0 0 0.5rem 0;
+  }
+  .product-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(var(--color-foreground), 0.1);
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  .pagination__list {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 4rem;
+    list-style: none;
+    padding: 0;
+  }
+  .pagination__item {
+    text-decoration: none;
+    color: inherit;
+  }
+  .pagination__item--current {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  document.getElementById('SortBy')?.addEventListener('change', function() {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('sort_by', this.value);
+    window.location.search = searchParams.toString();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Collection pages",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "default": 24,
+      "label": "Products per page"
+    },
+    {
+      "type": "checkbox",
+      "id": "asymmetric_grid",
+      "default": false,
+      "label": "Use asymmetric grid"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "small_batch_label",
+      "name": "Small Batch label",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows 'Small Batch' label if product has the 'small batch' tag."
+        }
+      ]
+    },
+    {
+      "type": "made_to_order_label",
+      "name": "Made to Order label",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows 'Made to Order' label if product has the 'made to order' tag."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,236 @@
+{%- assign product = all_products[section.settings.product] -%}
+<div class="featured-product color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <div class="featured-product__inner">
+      <div class="featured-product__media">
+        {%- if product != empty and product.featured_media -%}
+          <img srcset="{{ product.featured_media | image_url: width: 800 }} 1x, {{ product.featured_media | image_url: width: 1600 }} 2x"
+            src="{{ product.featured_media | image_url: width: 800 }}"
+            loading="lazy"
+            width="{{ product.featured_media.width }}"
+            height="{{ product.featured_media.height }}"
+            alt="{{ product.featured_media.alt | default: product.title | escape }}"
+            class="featured-product__image"
+          >
+        {%- else -%}
+          <div class="featured-product__placeholder">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="featured-product__info">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+            {%- when 'title' -%}
+              <h2 class="featured-product__title h1" {{ block.shopify_attributes }}>
+                {%- if product != empty -%}
+                  {{ product.title }}
+                {%- else -%}
+                  Example Product
+                {%- endif -%}
+              </h2>
+            {%- when 'price' -%}
+              <div class="featured-product__price" {{ block.shopify_attributes }}>
+                {%- if product != empty -%}
+                  <span class="price-item">{{ product.price | money }}</span>
+                  {%- if product.compare_at_price > product.price -%}
+                    <s class="price-item price-item--sale">{{ product.compare_at_price | money }}</s>
+                  {%- endif -%}
+                  {%- if cart.taxes_included -%}
+                    <span class="taxes-included">{{ 'products.product.taxes_inclusive' | t }}</span>
+                  {%- endif -%}
+                {%- else -%}
+                  <span class="price-item">$19.99</span>
+                {%- endif -%}
+              </div>
+            {%- when 'vendor' -%}
+              <div class="featured-product__vendor" {{ block.shopify_attributes }}>
+                {{ product.vendor | default: shop.name }}
+              </div>
+            {%- when 'description' -%}
+              <div class="featured-product__description rte" {{ block.shopify_attributes }}>
+                {%- if product != empty -%}
+                  {{ product.description }}
+                {%- else -%}
+                  <p>This is a demonstration of how a product description might look.</p>
+                {%- endif -%}
+              </div>
+            {%- when 'buy_buttons' -%}
+              <div class="featured-product__buy-buttons" {{ block.shopify_attributes }}>
+                {%- if product != empty -%}
+                  {%- form 'product', product -%}
+                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                    <button type="submit" name="add" class="button button--full-width" {% unless product.available %}disabled{% endunless %}>
+                      {%- if product.available -%}
+                        {{ 'products.product.add_to_cart' | t }}
+                      {%- else -%}
+                        {{ 'products.product.sold_out' | t }}
+                      {%- endif -%}
+                    </button>
+                    {%- if block.settings.show_dynamic_checkout -%}
+                      {{ form | payment_button }}
+                    {%- endif -%}
+                  {%- endform -%}
+                {%- else -%}
+                  <button type="button" class="button button--full-width">Add to cart</button>
+                {%- endif -%}
+              </div>
+            {%- when 'makers_note' -%}
+              <div class="featured-product__makers-note" {{ block.shopify_attributes }}>
+                <h3 class="h6">{{ 'products.product.makers_note' | t }}</h3>
+                <div class="rte">{{ block.settings.note }}</div>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .featured-product {
+    padding: var(--section-spacing) 0;
+  }
+  .featured-product__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  @media screen and (min-width: 750px) {
+    .featured-product__inner {
+      flex-direction: row;
+      align-items: center;
+    }
+    .featured-product__media,
+    .featured-product__info {
+      width: 50%;
+    }
+  }
+  .featured-product__image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  .featured-product__title {
+    margin-bottom: 0.5rem;
+  }
+  .featured-product__price {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+  }
+  .featured-product__buy-buttons {
+    margin-top: 2rem;
+  }
+  .button--full-width {
+    width: 100%;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1
+    },
+    {
+      "type": "vendor",
+      "name": "Vendor",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "default": true,
+          "label": "Show dynamic checkout buttons"
+        }
+      ]
+    },
+    {
+      "type": "makers_note",
+      "name": "Maker's note",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "note",
+          "label": "Note content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product",
+      "blocks": [
+        {
+          "type": "title"
+        },
+        {
+          "type": "price"
+        },
+        {
+          "type": "description"
+        },
+        {
+          "type": "buy_buttons"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

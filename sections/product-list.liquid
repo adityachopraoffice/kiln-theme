@@ -1,0 +1,230 @@
+<div class="product-list color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="product-list__header">
+        <h2 class="h2">{{ section.settings.heading | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="product-list__items product-list__items--{{ section.settings.layout }}">
+      {%- for block in section.blocks -%}
+        <div class="product-list__item" {{ block.shopify_attributes }}>
+          {%- assign product = all_products[block.settings.product] -%}
+          {%- if product != empty -%}
+            <a href="{{ product.url }}" class="product-card">
+              <div class="product-card__image-wrapper">
+                {%- if product.featured_media -%}
+                  <img srcset="{{ product.featured_media | image_url: width: 600 }} 1x, {{ product.featured_media | image_url: width: 1200 }} 2x"
+                    src="{{ product.featured_media | image_url: width: 600 }}"
+                    loading="lazy"
+                    width="{{ product.featured_media.width }}"
+                    height="{{ product.featured_media.height }}"
+                    alt="{{ product.featured_media.alt | default: product.title | escape }}"
+                    class="product-card__image"
+                  >
+                {%- else -%}
+                  <div class="product-card__placeholder">
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="product-card__info">
+                <h3 class="h5 product-card__title">{{ product.title }}</h3>
+                <div class="product-card__price">
+                  {%- if product.compare_at_price > product.price -%}
+                    <s class="price-item--regular">{{ product.compare_at_price | money }}</s>
+                    <span class="price-item--sale">{{ product.price | money }}</span>
+                  {%- else -%}
+                    <span class="price-item--regular">{{ product.price | money }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- else -%}
+            <div class="product-card">
+              <div class="product-card__image-wrapper">
+                <div class="product-card__placeholder">
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              </div>
+              <div class="product-card__info">
+                <h3 class="h5 product-card__title">Example Product</h3>
+                <div class="product-card__price">
+                  <span class="price-item--regular">$19.99</span>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .product-list {
+    padding: var(--section-spacing) 0;
+  }
+  .product-list__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  /* Grid Layout */
+  .product-list__items--grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  @media screen and (min-width: 750px) {
+    .product-list__items--grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* List Layout */
+  .product-list__items--list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .product-list__items--list .product-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    text-align: left;
+  }
+  .product-list__items--list .product-card__image-wrapper {
+    width: 150px;
+    padding-bottom: 150px; /* 1:1 aspect ratio for list */
+    flex-shrink: 0;
+  }
+
+  .product-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .product-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 125%; /* 4:5 aspect ratio for grid */
+    overflow: hidden;
+    background-color: rgba(var(--color-foreground), 0.05);
+    border-radius: 4px;
+  }
+  .product-card__image,
+  .product-card__placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .product-card__info {
+    padding-top: 1rem;
+  }
+  .product-list__items--grid .product-card__info {
+    text-align: center;
+  }
+  .product-card__title {
+    margin: 0 0 0.5rem 0;
+  }
+  .price-item--sale {
+    color: #b00;
+    margin-left: 0.5rem;
+  }
+  s.price-item--regular {
+    opacity: 0.7;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Product list",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Featured products",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "list",
+          "label": "List"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product list",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

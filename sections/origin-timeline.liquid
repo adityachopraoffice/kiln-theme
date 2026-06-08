@@ -1,0 +1,162 @@
+<div class="origin-timeline color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="origin-timeline__header">
+        <h2 class="h2">{{ section.settings.heading | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="origin-timeline__scroller">
+      <div class="origin-timeline__items">
+        {%- for block in section.blocks -%}
+          <div class="origin-timeline__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <div class="origin-timeline__image">
+                <img srcset="{{ block.settings.image | image_url: width: 400 }} 1x, {{ block.settings.image | image_url: width: 800 }} 2x"
+                  src="{{ block.settings.image | image_url: width: 400 }}"
+                  loading="lazy"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  alt="{{ block.settings.image.alt | escape }}"
+                >
+              </div>
+            {%- endif -%}
+            <div class="origin-timeline__content">
+              <span class="origin-timeline__year h6">{{ block.settings.year | escape }}</span>
+              <h3 class="origin-timeline__title h5">{{ block.settings.title | escape }}</h3>
+              <div class="origin-timeline__text rte">{{ block.settings.description }}</div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .origin-timeline {
+    padding: var(--section-spacing) 0;
+    overflow: hidden;
+  }
+  .origin-timeline__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .origin-timeline__scroller {
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+  }
+  .origin-timeline__scroller::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+  .origin-timeline__items {
+    display: flex;
+    gap: 2rem;
+    min-width: min-content;
+    padding-bottom: 1rem;
+  }
+  .origin-timeline__item {
+    width: 300px;
+    flex-shrink: 0;
+  }
+  .origin-timeline__image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  .origin-timeline__year {
+    display: block;
+    color: rgba(var(--color-foreground), 0.6);
+    margin-bottom: 0.5rem;
+  }
+  .origin-timeline__title {
+    margin-bottom: 0.5rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Origin timeline",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Our Story",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "event",
+      "name": "Event",
+      "settings": [
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Year",
+          "default": "2020"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "The Beginning"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Where it all started.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Origin timeline",
+      "blocks": [
+        {
+          "type": "event"
+        },
+        {
+          "type": "event"
+        },
+        {
+          "type": "event"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

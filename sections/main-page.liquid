@@ -1,0 +1,59 @@
+<div class="main-page color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width page-width--narrow">
+    <h1 class="main-page-title h1 text-center">
+      {{ page.title | escape }}
+    </h1>
+    
+    <div class="main-page-content rte">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+<style>
+  .main-page {
+    padding: var(--section-spacing) 0;
+  }
+  .page-width--narrow {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .main-page-title {
+    margin-bottom: 3rem;
+  }
+  .text-center {
+    text-align: center;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ]
+}
+{% endschema %}

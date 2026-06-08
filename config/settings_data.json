@@ -1,0 +1,36 @@
+{
+  "current": {
+    "color_clay_bg": "#C4714F",
+    "color_clay_text": "#F5F0E8",
+    "color_linen_bg": "#F5F0E8",
+    "color_linen_text": "#3D3935",
+    "color_ash_bg": "#3D3935",
+    "color_ash_text": "#F5F0E8",
+    "color_sage_bg": "#7D9B76",
+    "color_sage_text": "#F5F0E8",
+    "default_color_scheme": "linen",
+    "type_heading_font": "work_sans_n6",
+    "type_body_font": "work_sans_n4",
+    "page_width": 1200,
+    "section_spacing": 40,
+    "cart_type": "drawer"
+  },
+  "presets": {
+    "Default": {
+      "color_clay_bg": "#C4714F",
+      "color_clay_text": "#F5F0E8",
+      "color_linen_bg": "#F5F0E8",
+      "color_linen_text": "#3D3935",
+      "color_ash_bg": "#3D3935",
+      "color_ash_text": "#F5F0E8",
+      "color_sage_bg": "#7D9B76",
+      "color_sage_text": "#F5F0E8",
+      "default_color_scheme": "linen",
+      "type_heading_font": "work_sans_n6",
+      "type_body_font": "work_sans_n4",
+      "page_width": 1200,
+      "section_spacing": 40,
+      "cart_type": "drawer"
+    }
+  }
+}

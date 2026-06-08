@@ -1,0 +1,151 @@
+<div class="newsletter color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <div class="newsletter__wrapper">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="h2 newsletter__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="h4 newsletter__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="newsletter__text rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {% form 'customer', class: 'newsletter__form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        
+        <div class="newsletter__input-group">
+          <label class="visually-hidden" for="NewsletterEmail-{{ section.id }}">
+            Email
+          </label>
+          <input
+            id="NewsletterEmail-{{ section.id }}"
+            type="email"
+            name="contact[email]"
+            class="field__input"
+            value="{{ form.email }}"
+            aria-required="true"
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="email"
+            placeholder="Your email address"
+            required
+          >
+          <button type="submit" class="button" name="commit">
+            {{ section.settings.button_label | escape }}
+          </button>
+        </div>
+        
+        {%- if form.errors -%}
+          <small class="form__message error" id="Newsletter-error--{{ section.id }}">
+            {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+          </small>
+        {%- endif -%}
+        
+        {%- if form.posted_successfully? -%}
+          <h3 class="form__message success" id="Newsletter-success--{{ section.id }}" tabindex="-1" autofocus>
+            Thanks for subscribing!
+          </h3>
+        {%- endif -%}
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .newsletter {
+    padding: calc(var(--section-spacing) * 1.5) 0;
+  }
+  .newsletter__wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .newsletter__heading {
+    margin-bottom: 0.5rem;
+  }
+  .newsletter__subheading {
+    margin-bottom: 1rem;
+    font-weight: normal;
+  }
+  .newsletter__text {
+    margin-bottom: 2rem;
+  }
+  .newsletter__form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .newsletter__input-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .form__message {
+    margin-top: 1rem;
+    display: block;
+  }
+  .form__message.error {
+    color: #b00;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Subscribe",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>Sign up to get the latest on sales, new releases and more.</p>",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Join the Studio",
+      "label": "Button label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

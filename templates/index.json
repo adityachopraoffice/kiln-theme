@@ -1,0 +1,77 @@
+{
+  "layout": "theme",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "Welcome to our store",
+        "link": "",
+        "color_scheme": "ash",
+        "dismissible": true
+      }
+    },
+    "studio-hero": {
+      "type": "studio-hero",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Handcrafted for your home"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every piece is uniquely crafted.</p>"
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop now",
+            "button_link": "shopify:\/\/collections\/all"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text",
+        "button"
+      ],
+      "settings": {
+        "overlay_opacity": 30,
+        "color_scheme": "linen",
+        "show_divider": true
+      }
+    },
+    "collection-grid": {
+      "type": "collection-grid",
+      "blocks": {
+        "collection_1": {
+          "type": "collection",
+          "settings": {
+          }
+        },
+        "collection_2": {
+          "type": "collection",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "collection_1",
+        "collection_2"
+      ],
+      "settings": {
+        "heading": "Shop by category",
+        "card_style": "standard",
+        "color_scheme": "linen"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "studio-hero",
+    "collection-grid"
+  ]
+}

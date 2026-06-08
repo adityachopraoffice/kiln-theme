@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_linen_bg }}">
+  
+  {% render 'seo' %}
+  
+  {{ content_for_header }}
+  
+  {%- liquid
+    assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+    assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+    assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+    assign heading_font_bold = settings.type_heading_font | font_modify: 'weight', 'bold'
+    assign heading_font_italic = settings.type_heading_font | font_modify: 'style', 'italic'
+    assign heading_font_bold_italic = heading_font_bold | font_modify: 'style', 'italic'
+  -%}
+  
+  <style>
+    {{ settings.type_body_font | font_face: font_display: 'swap' }}
+    {{ body_font_bold | font_face: font_display: 'swap' }}
+    {{ body_font_italic | font_face: font_display: 'swap' }}
+    {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+    {{ settings.type_heading_font | font_face: font_display: 'swap' }}
+    {{ heading_font_bold | font_face: font_display: 'swap' }}
+    {{ heading_font_italic | font_face: font_display: 'swap' }}
+    {{ heading_font_bold_italic | font_face: font_display: 'swap' }}
+
+    :root {
+      --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+      --font-heading-family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+      
+      --color-clay-bg: {{ settings.color_clay_bg }};
+      --color-clay-text: {{ settings.color_clay_text }};
+      --color-linen-bg: {{ settings.color_linen_bg }};
+      --color-linen-text: {{ settings.color_linen_text }};
+      --color-ash-bg: {{ settings.color_ash_bg }};
+      --color-ash-text: {{ settings.color_ash_text }};
+      --color-sage-bg: {{ settings.color_sage_bg }};
+      --color-sage-text: {{ settings.color_sage_text }};
+      
+      --page-width: {{ settings.page_width }}px;
+      --section-spacing: {{ settings.section_spacing }}px;
+    }
+  </style>
+  
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  
+  <script src="{{ 'base.js' | asset_url }}" defer="defer"></script>
+</head>
+<body class="color-scheme-{{ settings.default_color_scheme | default: 'linen' }}">
+  <a class="skip-to-content-link" href="#MainContent">
+    {{ 'accessibility.skip_to_text' | t }}
+  </a>
+
+  {% sections 'header-group' %}
+
+  <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {% sections 'footer-group' %}
+
+  <ul hidden>
+    <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+    <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+  </ul>
+</body>
+</html>

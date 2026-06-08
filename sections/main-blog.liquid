@@ -1,0 +1,184 @@
+<div class="main-blog color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <div class="main-blog__header">
+      <h1 class="h1">{{ blog.title | escape }}</h1>
+    </div>
+
+    {%- paginate blog.articles by section.settings.posts_per_page -%}
+      <div class="main-blog__grid">
+        {%- for article in blog.articles -%}
+          <div class="blog-card">
+            <a href="{{ article.url }}" class="blog-card__link">
+              <div class="blog-card__image-wrapper">
+                {%- if article.image -%}
+                  <img srcset="{{ article.image | image_url: width: 600 }} 1x, {{ article.image | image_url: width: 1200 }} 2x"
+                    src="{{ article.image | image_url: width: 600 }}"
+                    loading="lazy"
+                    width="{{ article.image.width }}"
+                    height="{{ article.image.height }}"
+                    alt="{{ article.image.alt | escape }}"
+                    class="blog-card__image"
+                  >
+                {%- else -%}
+                  <div class="blog-card__placeholder">
+                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="blog-card__info">
+                <h2 class="blog-card__title h3">{{ article.title }}</h2>
+                <div class="blog-card__excerpt rte">
+                  {%- if article.excerpt.size > 0 -%}
+                    {{ article.excerpt }}
+                  {%- else -%}
+                    {{ article.content | strip_html | truncatewords: 30 }}
+                  {%- endif -%}
+                </div>
+                <span class="blog-card__read-more button button--secondary">{{ 'blogs.article.read_more' | t }}</span>
+              </div>
+            </a>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+          <ul class="pagination__list list-unstyled" role="list">
+            {%- if paginate.previous -%}
+              <li>
+                <a href="{{ paginate.previous.url }}" class="pagination__item pagination__item--prev" aria-label="{{ 'general.pagination.previous' | t }}">
+                  &larr; Prev
+                </a>
+              </li>
+            {%- endif -%}
+
+            {%- for part in paginate.parts -%}
+              <li>
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="pagination__item" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+                {%- else -%}
+                  {%- if part.title == paginate.current_page -%}
+                    <span class="pagination__item pagination__item--current" aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+                  {%- else -%}
+                    <span class="pagination__item">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+
+            {%- if paginate.next -%}
+              <li>
+                <a href="{{ paginate.next.url }}" class="pagination__item pagination__item--next" aria-label="{{ 'general.pagination.next' | t }}">
+                  Next &rarr;
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+<style>
+  .main-blog {
+    padding: var(--section-spacing) 0;
+  }
+  .main-blog__header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .main-blog__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media screen and (min-width: 750px) {
+    .main-blog__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .blog-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+  }
+  .blog-card__link:hover {
+    transform: translateY(-5px);
+  }
+  .blog-card__image-wrapper {
+    position: relative;
+    padding-bottom: 66%; /* 3:2 aspect ratio */
+    overflow: hidden;
+    background-color: rgba(var(--color-foreground), 0.05);
+  }
+  .blog-card__image,
+  .blog-card__placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .blog-card__info {
+    padding: 1.5rem 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .blog-card__title {
+    margin: 0 0 1rem 0;
+  }
+  .blog-card__excerpt {
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+  .blog-card__read-more {
+    align-self: flex-start;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "min": 6,
+      "max": 24,
+      "step": 2,
+      "default": 12,
+      "label": "Posts per page"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ]
+}
+{% endschema %}

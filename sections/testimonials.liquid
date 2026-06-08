@@ -1,0 +1,182 @@
+<div class="testimonials color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="testimonials__header">
+        <h2 class="h2">{{ section.settings.heading | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="testimonials__grid">
+      {%- for block in section.blocks -%}
+        <div class="testimonials__item" {{ block.shopify_attributes }}>
+          <div class="testimonials__content">
+            <svg class="icon icon-quote" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+            <div class="testimonials__text h4">
+              {{ block.settings.quote }}
+            </div>
+            <div class="testimonials__author">
+              {%- if block.settings.image != blank -%}
+                <img srcset="{{ block.settings.image | image_url: width: 100 }} 1x, {{ block.settings.image | image_url: width: 200 }} 2x"
+                  src="{{ block.settings.image | image_url: width: 100 }}"
+                  loading="lazy"
+                  width="50"
+                  height="50"
+                  alt="{{ block.settings.image.alt | escape }}"
+                  class="testimonials__author-image"
+                >
+              {%- endif -%}
+              <span class="testimonials__author-name h6">{{ block.settings.author | escape }}</span>
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .testimonials {
+    padding: var(--section-spacing) 0;
+  }
+  .testimonials__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .testimonials__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 2rem;
+    padding-bottom: 1rem;
+    scrollbar-width: none;
+  }
+  .testimonials__grid::-webkit-scrollbar {
+    display: none;
+  }
+  @media screen and (min-width: 750px) {
+    .testimonials__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      overflow-x: visible;
+      scroll-snap-type: none;
+    }
+  }
+  .testimonials__item {
+    flex: 0 0 80%;
+    scroll-snap-align: center;
+    background-color: rgba(var(--color-foreground), 0.03);
+    padding: 2.5rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  @media screen and (min-width: 750px) {
+    .testimonials__item {
+      flex: none;
+    }
+  }
+  .icon-quote {
+    color: rgba(var(--color-foreground), 0.2);
+    margin-bottom: 1.5rem;
+  }
+  .testimonials__text {
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+  .testimonials__author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .testimonials__author-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .testimonials__author-name {
+    margin: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "What our customers say",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote",
+          "default": "<p>These pieces are absolutely beautiful and the quality is outstanding.</p>"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Jane D."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Author photo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

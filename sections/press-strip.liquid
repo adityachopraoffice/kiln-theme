@@ -1,0 +1,171 @@
+<div class="press-strip color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="press-strip__header">
+        <h2 class="h6">{{ section.settings.heading | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="press-strip__items {% if section.settings.greyscale %}press-strip__items--greyscale{% endif %}">
+      {%- for block in section.blocks -%}
+        <div class="press-strip__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="press-strip__link">
+          {%- endif -%}
+          
+          {%- if block.settings.image != blank -%}
+            <img srcset="{{ block.settings.image | image_url: width: 200 }} 1x, {{ block.settings.image | image_url: width: 400 }} 2x"
+              src="{{ block.settings.image | image_url: width: 200 }}"
+              loading="lazy"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+              alt="{{ block.settings.image.alt | escape }}"
+              class="press-strip__image"
+            >
+          {%- else -%}
+            <div class="press-strip__placeholder">
+              {{ 'logo' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .press-strip {
+    padding: calc(var(--section-spacing) / 2) 0;
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  .press-strip__header {
+    text-align: center;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .press-strip__items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+  .press-strip__item {
+    flex: 0 0 100px;
+  }
+  @media screen and (min-width: 750px) {
+    .press-strip__item {
+      flex: 0 0 150px;
+      gap: 4rem;
+    }
+  }
+  .press-strip__link {
+    display: block;
+    transition: opacity 0.3s;
+  }
+  .press-strip__link:hover {
+    opacity: 0.7;
+  }
+  .press-strip__image,
+  .press-strip__placeholder {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .press-strip__items--greyscale .press-strip__image {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    transition: filter 0.3s, opacity 0.3s;
+  }
+  .press-strip__items--greyscale .press-strip__item:hover .press-strip__image {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Press strip",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "As seen in",
+      "label": "Heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "greyscale",
+      "default": true,
+      "label": "Greyscale images"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Press strip",
+      "blocks": [
+        {
+          "type": "logo"
+        },
+        {
+          "type": "logo"
+        },
+        {
+          "type": "logo"
+        },
+        {
+          "type": "logo"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

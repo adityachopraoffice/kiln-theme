@@ -1,0 +1,186 @@
+<div class="blog-feed color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="blog-feed__header">
+        <h2 class="h2">{{ section.settings.heading | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    {%- assign blog = blogs[section.settings.blog] -%}
+    
+    <div class="blog-feed__grid">
+      {%- if blog != empty and blog.articles_count > 0 -%}
+        {%- for article in blog.articles limit: section.settings.post_limit -%}
+          <div class="blog-card">
+            <a href="{{ article.url }}" class="blog-card__link">
+              <div class="blog-card__image-wrapper">
+                {%- if article.image -%}
+                  <img srcset="{{ article.image | image_url: width: 600 }} 1x, {{ article.image | image_url: width: 1200 }} 2x"
+                    src="{{ article.image | image_url: width: 600 }}"
+                    loading="lazy"
+                    width="{{ article.image.width }}"
+                    height="{{ article.image.height }}"
+                    alt="{{ article.image.alt | escape }}"
+                    class="blog-card__image"
+                  >
+                {%- else -%}
+                  <div class="blog-card__placeholder">
+                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="blog-card__info">
+                <h3 class="blog-card__title h4">{{ article.title }}</h3>
+                <div class="blog-card__excerpt rte">
+                  {%- if article.excerpt.size > 0 -%}
+                    {{ article.excerpt }}
+                  {%- else -%}
+                    {{ article.content | strip_html | truncatewords: 30 }}
+                  {%- endif -%}
+                </div>
+                <span class="blog-card__read-more button button--secondary">{{ 'blogs.article.read_more' | t }}</span>
+              </div>
+            </a>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..section.settings.post_limit) -%}
+          <div class="blog-card">
+            <div class="blog-card__image-wrapper">
+              <div class="blog-card__placeholder">
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            </div>
+            <div class="blog-card__info">
+              <h3 class="blog-card__title h4">Example Article</h3>
+              <div class="blog-card__excerpt rte">
+                <p>This is a placeholder for a blog article excerpt. It gives a brief overview of the content.</p>
+              </div>
+              <span class="blog-card__read-more button button--secondary">Read more</span>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .blog-feed {
+    padding: var(--section-spacing) 0;
+  }
+  .blog-feed__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .blog-feed__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media screen and (min-width: 750px) {
+    .blog-feed__grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
+  .blog-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+  }
+  .blog-card__link:hover {
+    transform: translateY(-5px);
+  }
+  .blog-card__image-wrapper {
+    position: relative;
+    padding-bottom: 66%; /* 3:2 aspect ratio */
+    overflow: hidden;
+    background-color: rgba(var(--color-foreground), 0.05);
+  }
+  .blog-card__image,
+  .blog-card__placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .blog-card__info {
+    padding: 1.5rem;
+    background-color: rgba(var(--color-foreground), 0.02);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .blog-card__title {
+    margin: 0 0 1rem 0;
+  }
+  .blog-card__excerpt {
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+  .blog-card__read-more {
+    align-self: flex-start;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog feed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Latest from the journal",
+      "label": "Heading"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 3,
+      "label": "Number of articles"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog feed"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,184 @@
+<div class="main-list-collections color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <div class="main-list-collections__header">
+      <h1 class="h1">{{ 'collections.general.title' | t }}</h1>
+    </div>
+
+    {%- paginate collections by section.settings.collections_per_page -%}
+      <div class="collection-grid">
+        {%- for collection in collections -%}
+          <div class="collection-grid__item">
+            <a href="{{ collection.url }}" class="collection-card">
+              <div class="collection-card__image-wrapper">
+                {%- if collection.featured_image -%}
+                  <img srcset="{{ collection.featured_image | image_url: width: 600 }} 1x, {{ collection.featured_image | image_url: width: 1200 }} 2x"
+                    src="{{ collection.featured_image | image_url: width: 600 }}"
+                    loading="lazy"
+                    width="{{ collection.featured_image.width }}"
+                    height="{{ collection.featured_image.height }}"
+                    alt="{{ collection.featured_image.alt | default: collection.title | escape }}"
+                    class="collection-card__image"
+                  >
+                {%- else -%}
+                  <div class="collection-card__placeholder">
+                    {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                {%- endif -%}
+              </div>
+              
+              <div class="collection-card__info">
+                <h3 class="h4 collection-card__title">{{ collection.title }}</h3>
+              </div>
+            </a>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+          <ul class="pagination__list list-unstyled" role="list">
+            {%- if paginate.previous -%}
+              <li>
+                <a href="{{ paginate.previous.url }}" class="pagination__item pagination__item--prev" aria-label="{{ 'general.pagination.previous' | t }}">
+                  &larr; Prev
+                </a>
+              </li>
+            {%- endif -%}
+
+            {%- for part in paginate.parts -%}
+              <li>
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="pagination__item" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+                {%- else -%}
+                  {%- if part.title == paginate.current_page -%}
+                    <span class="pagination__item pagination__item--current" aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+                  {%- else -%}
+                    <span class="pagination__item">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+
+            {%- if paginate.next -%}
+              <li>
+                <a href="{{ paginate.next.url }}" class="pagination__item pagination__item--next" aria-label="{{ 'general.pagination.next' | t }}">
+                  Next &rarr;
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+<style>
+  .main-list-collections {
+    padding: var(--section-spacing) 0;
+  }
+  .main-list-collections__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  @media screen and (min-width: 750px) {
+    .collection-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .collection-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+  }
+  .collection-card:hover {
+    transform: translateY(-5px);
+  }
+  .collection-card__image-wrapper {
+    position: relative;
+    padding-bottom: 125%; /* 4:5 */
+    overflow: hidden;
+    background-color: rgba(var(--color-foreground), 0.05);
+    margin-bottom: 1rem;
+    border-radius: 4px;
+  }
+  .collection-card__image,
+  .collection-card__placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .collection-card__info {
+    text-align: center;
+  }
+  .collection-card__title {
+    margin: 0;
+  }
+  
+  .pagination__list {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 4rem;
+    list-style: none;
+    padding: 0;
+  }
+  .pagination__item {
+    text-decoration: none;
+    color: inherit;
+  }
+  .pagination__item--current {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "settings": [
+    {
+      "type": "range",
+      "id": "collections_per_page",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "default": 24,
+      "label": "Collections per page"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ]
+}
+{% endschema %}

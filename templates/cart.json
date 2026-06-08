@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {
+        "show_cart_note": true,
+        "color_scheme": "linen"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

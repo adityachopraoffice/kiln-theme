@@ -1,0 +1,118 @@
+{%- if section.settings.text != blank -%}
+  <div class="announcement-bar color-scheme-{{ section.settings.color_scheme }}" role="region" aria-label="Announcement">
+    {%- if section.settings.link != blank -%}
+      <a href="{{ section.settings.link }}" class="announcement-bar__link">
+    {%- endif -%}
+        <div class="page-width">
+          <p class="announcement-bar__message h6">
+            {{ section.settings.text | escape }}
+          </p>
+        </div>
+    {%- if section.settings.link != blank -%}
+      </a>
+    {%- endif -%}
+    {%- if section.settings.dismissible -%}
+      <button type="button" class="announcement-bar__close" aria-label="{{ 'accessibility.close' | t }}">
+        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-close" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+      </button>
+    {%- endif -%}
+  </div>
+
+  <style>
+    .announcement-bar {
+      position: relative;
+      text-align: center;
+      padding: 0.5rem 0;
+      z-index: 10;
+    }
+    .announcement-bar__link {
+      display: block;
+      text-decoration: none;
+    }
+    .announcement-bar__message {
+      margin: 0;
+    }
+    .announcement-bar__close {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+
+  {%- if section.settings.dismissible -%}
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const announcementBar = document.querySelector('.announcement-bar');
+        const closeBtn = announcementBar?.querySelector('.announcement-bar__close');
+        
+        if (closeBtn && announcementBar) {
+          closeBtn.addEventListener('click', () => {
+            announcementBar.style.display = 'none';
+          });
+        }
+      });
+    </script>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "default": "Welcome to our store",
+      "label": "Text"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "ash"
+    },
+    {
+      "type": "checkbox",
+      "id": "dismissible",
+      "default": false,
+      "label": "Show close button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar"
+    }
+  ]
+}
+{% endschema %}

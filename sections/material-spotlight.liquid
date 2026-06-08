@@ -1,0 +1,140 @@
+<div class="material-spotlight color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="material-spotlight__header">
+        <h2 class="h2">{{ section.settings.heading | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="material-spotlight__grid">
+      {%- for block in section.blocks -%}
+        <div class="material-spotlight__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <div class="material-spotlight__image">
+              <img srcset="{{ block.settings.image | image_url: width: 200 }} 1x, {{ block.settings.image | image_url: width: 400 }} 2x"
+                src="{{ block.settings.image | image_url: width: 200 }}"
+                loading="lazy"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                alt="{{ block.settings.image.alt | escape }}"
+              >
+            </div>
+          {%- endif -%}
+          <div class="material-spotlight__content">
+            <h3 class="h5">{{ block.settings.title | escape }}</h3>
+            <div class="rte">{{ block.settings.description }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .material-spotlight {
+    padding: var(--section-spacing) 0;
+  }
+  .material-spotlight__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .material-spotlight__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media screen and (min-width: 750px) {
+    .material-spotlight__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .material-spotlight__item {
+    text-align: center;
+  }
+  .material-spotlight__image img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Material spotlight",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Our Materials",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "material",
+      "name": "Material",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Material name",
+          "default": "Earthen Clay"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Locally sourced clay rich in minerals.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image or Icon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Material spotlight",
+      "blocks": [
+        {
+          "type": "material"
+        },
+        {
+          "type": "material"
+        },
+        {
+          "type": "material"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,197 @@
+<div class="process-steps color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="process-steps__header">
+        <h2 class="h2">{{ section.settings.heading | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="process-steps__items">
+      {%- for block in section.blocks -%}
+        <div class="process-steps__item" {{ block.shopify_attributes }}>
+          <div class="process-steps__image-wrapper">
+            {%- if block.settings.image != blank -%}
+              <img srcset="{{ block.settings.image | image_url: width: 600 }} 1x, {{ block.settings.image | image_url: width: 1200 }} 2x"
+                src="{{ block.settings.image | image_url: width: 600 }}"
+                loading="lazy"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                class="process-steps__image"
+              >
+            {%- else -%}
+              <div class="process-steps__placeholder">
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {%- endif -%}
+          </div>
+          
+          <div class="process-steps__content">
+            <span class="process-steps__number h6">Step {{ block.settings.step_number | escape }}</span>
+            <h3 class="process-steps__title h4">{{ block.settings.title | escape }}</h3>
+            <div class="process-steps__text rte">{{ block.settings.description }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .process-steps {
+    padding: var(--section-spacing) 0;
+  }
+  .process-steps__header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .process-steps__items {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+  .process-steps__item {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  @media screen and (min-width: 750px) {
+    .process-steps__item {
+      flex-direction: row;
+      align-items: center;
+    }
+    .process-steps__item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+    .process-steps__image-wrapper,
+    .process-steps__content {
+      width: 50%;
+    }
+    .process-steps__content {
+      padding: 0 4rem;
+    }
+  }
+  .process-steps__image-wrapper {
+    position: relative;
+    padding-bottom: 75%; /* 4:3 aspect ratio */
+    overflow: hidden;
+    background-color: rgba(var(--color-foreground), 0.05);
+    border-radius: 8px;
+  }
+  .process-steps__image,
+  .process-steps__placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .process-steps__number {
+    display: block;
+    color: rgba(var(--color-foreground), 0.6);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .process-steps__title {
+    margin-bottom: 1rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Process steps",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "How it's made",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_number",
+          "label": "Step number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Preparation"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Preparing the raw materials.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Process steps",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "01",
+            "title": "Sourcing"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "02",
+            "title": "Crafting"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "03",
+            "title": "Finishing"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

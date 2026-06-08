@@ -1,0 +1,194 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Kiln",
+    "theme_author": "Kiln Team",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "https://help.shopify.com",
+    "theme_support_url": "https://support.shopify.com"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_clay_bg",
+        "label": "Clay background",
+        "default": "#C4714F"
+      },
+      {
+        "type": "color",
+        "id": "color_clay_text",
+        "label": "Clay foreground",
+        "default": "#F5F0E8"
+      },
+      {
+        "type": "color",
+        "id": "color_linen_bg",
+        "label": "Linen background",
+        "default": "#F5F0E8"
+      },
+      {
+        "type": "color",
+        "id": "color_linen_text",
+        "label": "Linen foreground",
+        "default": "#3D3935"
+      },
+      {
+        "type": "color",
+        "id": "color_ash_bg",
+        "label": "Ash background",
+        "default": "#3D3935"
+      },
+      {
+        "type": "color",
+        "id": "color_ash_text",
+        "label": "Ash foreground",
+        "default": "#F5F0E8"
+      },
+      {
+        "type": "color",
+        "id": "color_sage_bg",
+        "label": "Sage background",
+        "default": "#7D9B76"
+      },
+      {
+        "type": "color",
+        "id": "color_sage_text",
+        "label": "Sage foreground",
+        "default": "#F5F0E8"
+      },
+      {
+        "type": "select",
+        "id": "default_color_scheme",
+        "label": "Default color scheme",
+        "options": [
+          {
+            "value": "clay",
+            "label": "Clay"
+          },
+          {
+            "value": "linen",
+            "label": "Linen"
+          },
+          {
+            "value": "ash",
+            "label": "Ash"
+          },
+          {
+            "value": "sage",
+            "label": "Sage"
+          }
+        ],
+        "default": "linen"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Heading font",
+        "default": "work_sans_n6"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "work_sans_n4"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 1000,
+        "max": 1600,
+        "step": 100,
+        "default": 1200,
+        "unit": "px",
+        "label": "Page width"
+      },
+      {
+        "type": "range",
+        "id": "section_spacing",
+        "min": 20,
+        "max": 100,
+        "step": 4,
+        "default": 40,
+        "unit": "px",
+        "label": "Section spacing"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest_link",
+        "label": "Pinterest"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok_link",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "YouTube"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          },
+          {
+            "value": "modal",
+            "label": "Modal"
+          }
+        ],
+        "default": "drawer"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "small_batch_label": {
+          "type": "small_batch_label",
+          "settings": {
+          }
+        },
+        "made_to_order_label": {
+          "type": "made_to_order_label",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "small_batch_label",
+        "made_to_order_label"
+      ],
+      "settings": {
+        "products_per_page": 24,
+        "color_scheme": "linen",
+        "asymmetric_grid": false
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
