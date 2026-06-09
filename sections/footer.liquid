@@ -175,11 +175,28 @@
       <div class="footer__copyright">
         {%- if shop.policies != empty -%}
           <ul class="policies list-unstyled">
+            {%- assign has_shipping = false -%}
+            {%- assign has_subscription = false -%}
             {%- for policy in shop.policies -%}
               {%- if policy != blank -%}
                 <li><small class="copyright__content"><a href="{{ policy.url }}" class="link">{{ policy.title }}</a></small></li>
+                {%- if policy.url contains 'shipping-policy' -%}{%- assign has_shipping = true -%}{%- endif -%}
+                {%- if policy.url contains 'subscription-policy' -%}{%- assign has_subscription = true -%}{%- endif -%}
               {%- endif -%}
             {%- endfor -%}
+            {%- if has_shipping == false -%}
+              <li><small class="copyright__content"><a href="/policies/shipping-policy" class="link">Shipping policy</a></small></li>
+            {%- endif -%}
+            {%- if has_subscription == false -%}
+              <li><small class="copyright__content"><a href="/policies/subscription-policy" class="link">Cancellation policy</a></small></li>
+            {%- endif -%}
+            <li><small class="copyright__content"><a href="/policies/contact-information" class="link">Contact information</a></small></li>
+          </ul>
+        {%- else -%}
+          <ul class="policies list-unstyled">
+            <li><small class="copyright__content"><a href="/policies/shipping-policy" class="link">Shipping policy</a></small></li>
+            <li><small class="copyright__content"><a href="/policies/subscription-policy" class="link">Cancellation policy</a></small></li>
+            <li><small class="copyright__content"><a href="/policies/contact-information" class="link">Contact information</a></small></li>
           </ul>
         {%- endif -%}
         <small class="copyright__content">&copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: routes.root_url }}</small>
