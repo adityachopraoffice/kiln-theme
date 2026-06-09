@@ -1,0 +1,51 @@
+<div class="customer account page-width" style="padding: 4rem 0;">
+  <h1>{{ 'customer.account.title' | t | default: 'Account' }}</h1>
+  <a href="{{ routes.account_logout_url }}">{{ 'customer.log_out' | t | default: 'Log out' }}</a>
+  <div style="margin-top: 2rem;">
+    <h2>{{ 'customer.orders.title' | t | default: 'Order history' }}</h2>
+    {% paginate customer.orders by 20 %}
+      {%- if customer.orders.size > 0 -%}
+        <table style="width:100%; text-align:left;">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Date</th>
+              <th>Payment status</th>
+              <th>Fulfillment status</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for order in customer.orders -%}
+              <tr>
+                <td><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                <td>{{ order.created_at | time_tag: format: 'date' }}</td>
+                <td>{{ order.financial_status_label }}</td>
+                <td>{{ order.fulfillment_status_label }}</td>
+                <td>{{ order.total_net_amount | money_with_currency }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      {%- else -%}
+        <p>You haven't placed any orders yet.</p>
+      {%- endif -%}
+      {%- if paginate.pages > 1 -%}
+        <nav role="navigation">
+          {{ paginate | default_pagination }}
+        </nav>
+      {%- endif -%}
+    {% endpaginate %}
+  </div>
+  <div style="margin-top: 2rem;">
+    <h2>Account details</h2>
+    {{ customer.default_address | format_address }}
+    <a href="{{ routes.account_addresses_url }}">View addresses ({{ customer.addresses_count }})</a>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Account",
+  "settings": []
+}
+{% endschema %}

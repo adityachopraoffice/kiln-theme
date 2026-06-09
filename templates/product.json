@@ -46,9 +46,19 @@
       "settings": {
         "color_scheme": "linen"
       }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "You may also like",
+        "recommendation_intent": "related",
+        "products_to_show": 4,
+        "color_scheme": "linen"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "recommendations"
   ]
 }

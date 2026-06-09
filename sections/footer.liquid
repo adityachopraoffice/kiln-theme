@@ -101,6 +101,50 @@
         </ul>
       </div>
 
+      <div class="footer__follow-on-shop">
+        {%- if section.settings.enable_follow_on_shop and shop.features.follow_on_shop? -%}
+          {{ shop | login_button: action: 'follow' }}
+        {%- endif -%}
+      </div>
+
+      <div class="footer__localization">
+        {%- if section.settings.enable_country_selector or section.settings.enable_language_selector -%}
+          {%- form 'localization', id: 'FooterLocalizationForm', class: 'localization-form' -%}
+            {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+              <div class="localization-form__select">
+                <h2 class="visually-hidden" id="FooterCountryLabel">{{ 'localization.country_label' | t | default: 'Country/region' }}</h2>
+                <select name="country_code" aria-labelledby="FooterCountryLabel" class="localization-selector link">
+                  {%- for country in localization.available_countries -%}
+                    <option value="{{ country.iso_code }}" {%- if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                      {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+              <div class="localization-form__select">
+                <h2 class="visually-hidden" id="FooterLanguageLabel">{{ 'localization.language_label' | t | default: 'Language' }}</h2>
+                <select name="locale_code" aria-labelledby="FooterLanguageLabel" class="localization-selector link">
+                  {%- for language in localization.available_languages -%}
+                    <option value="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                      {{ language.endonym_name | capitalize }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endif -%}
+          {%- endform -%}
+          <script>
+            document.querySelectorAll('#FooterLocalizationForm .localization-selector').forEach(selector => {
+              selector.addEventListener('change', (e) => {
+                e.target.closest('form').submit();
+              });
+            });
+          </script>
+        {%- endif -%}
+      </div>
+
       <div class="footer__payment">
         <span class="visually-hidden">Payment methods</span>
         <ul class="list list-payment list-unstyled" role="list">
@@ -205,6 +249,30 @@
     gap: 1rem;
     margin-bottom: 0.5rem;
   }
+  .footer__follow-on-shop {
+    margin-bottom: 1rem;
+  }
+  .footer__localization {
+    margin-bottom: 1rem;
+  }
+  .localization-form {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .localization-form__select {
+    position: relative;
+  }
+  .localization-selector {
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    background-color: transparent;
+    border: 1px solid var(--color-foreground);
+    border-radius: 4px;
+    color: var(--color-foreground);
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
 </style>
 
 {% schema %}
@@ -246,6 +314,24 @@
       "id": "newsletter_heading",
       "default": "Subscribe to our emails",
       "label": "Newsletter heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_follow_on_shop",
+      "default": true,
+      "label": "Enable Follow on Shop"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "Enable country/region selector"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "Enable language selector"
     }
   ]
 }

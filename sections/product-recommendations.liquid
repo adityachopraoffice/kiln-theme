@@ -1,0 +1,136 @@
+<div class="product-recommendations page-width color-scheme-{{ section.settings.color_scheme }}" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent={{ section.settings.recommendation_intent }}">
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <h2 class="product-recommendations__heading h3">{{ section.settings.heading | escape }}</h2>
+    <ul class="grid grid--2-col grid--4-col-desktop list-unstyled" role="list">
+      {%- for recommendation in recommendations.products -%}
+        <li class="grid__item">
+          <a href="{{ recommendation.url }}" class="product-card-link">
+            {%- if recommendation.featured_image -%}
+              <img src="{{ recommendation.featured_image | image_url: width: 400 }}" alt="{{ recommendation.featured_image.alt | escape }}" loading="lazy" width="200" height="{{ 200 | divided_by: recommendation.featured_image.aspect_ratio | ceil }}" style="width:100%; height:auto; border-radius:4px;">
+            {%- endif -%}
+            <h3 class="h5" style="margin: 0.5rem 0;">{{ recommendation.title }}</h3>
+            <div class="price">
+              {%- if recommendation.compare_at_price > recommendation.price -%}
+                <s>{{ recommendation.compare_at_price | money }}</s> {{ recommendation.price | money }}
+              {%- else -%}
+                {{ recommendation.price | money }}
+              {%- endif -%}
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>
+
+<style>
+  .product-recommendations {
+    padding: var(--section-spacing) 0;
+  }
+  .product-recommendations__heading {
+    margin-bottom: 2rem;
+  }
+  .product-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+</style>
+
+<script>
+  class ProductRecommendations extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+
+        fetch(this.dataset.url)
+          .then(response => response.text())
+          .then(text => {
+            const html = document.createElement('div');
+            html.innerHTML = text;
+            const recommendations = html.querySelector('.product-recommendations');
+
+            if (recommendations && recommendations.innerHTML.trim().length) {
+              this.innerHTML = recommendations.innerHTML;
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 200px 0px'}).observe(this);
+    }
+  }
+
+  customElements.define('product-recommendations', ProductRecommendations);
+</script>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "tag": "product-recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "You may also like",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "recommendation_intent",
+      "label": "Intent",
+      "options": [
+        {
+          "value": "related",
+          "label": "Related products"
+        },
+        {
+          "value": "complementary",
+          "label": "Complementary products"
+        }
+      ],
+      "default": "related"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "label": "Maximum products to show"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "clay",
+          "label": "Clay"
+        },
+        {
+          "value": "linen",
+          "label": "Linen"
+        },
+        {
+          "value": "ash",
+          "label": "Ash"
+        },
+        {
+          "value": "sage",
+          "label": "Sage"
+        }
+      ],
+      "default": "linen"
+    }
+  ]
+}
+{% endschema %}

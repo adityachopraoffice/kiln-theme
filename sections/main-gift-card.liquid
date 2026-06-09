@@ -31,7 +31,13 @@
             readonly
           >
           <div class="gift-card__copy-success form__message form__message--success visually-hidden" role="status"></div>
-          <button class="button gift-card__copy-button">{{ 'gift_cards.issued.copy_code' | t }}</button>
+          <button class="button gift-card__copy-button" style="margin-bottom: 1.5rem;">{{ 'gift_cards.issued.copy_code' | t }}</button>
+          
+          {%- if gift_card.pass_url -%}
+            <a href="{{ gift_card.pass_url }}" class="gift_card__apple-wallet">
+              <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t | default: 'Add To Apple Wallet' }}" loading="lazy" style="display:block; margin: 0 auto;">
+            </a>
+          {%- endif -%}
         </div>
 
         <div class="gift-card__buttons">

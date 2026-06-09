@@ -1,0 +1,29 @@
+<div class="customer login page-width" style="padding: 4rem 0; max-width: 500px; margin: 0 auto; text-align: center;">
+  <h1>Login</h1>
+  {%- form 'customer_login' -%}
+    {%- if form.errors -%}
+      <div class="form__message" style="color: red; margin-bottom: 1rem;">
+        {{ form.errors | default_errors }}
+      </div>
+    {%- endif -%}
+    
+    <div class="field" style="margin-bottom: 1rem;">
+      <input type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off" placeholder="Email" style="width:100%; padding: 0.5rem;" required>
+    </div>
+    
+    <div class="field" style="margin-bottom: 1rem;">
+      <input type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password" placeholder="Password" style="width:100%; padding: 0.5rem;" required>
+    </div>
+    
+    <button type="submit" class="button" style="width:100%; padding: 0.5rem;">Sign In</button>
+    <div style="margin-top: 1rem;">
+      <a href="{{ routes.account_register_url }}">Create account</a>
+    </div>
+  {%- endform -%}
+</div>
+{% schema %}
+{
+  "name": "Login",
+  "settings": []
+}
+{% endschema %}

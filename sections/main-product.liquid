@@ -124,7 +124,31 @@
                       {{ form | payment_button }}
                     {%- endif -%}
                   </div>
+                  <div class="product-form__payment-terms">
+                    {{ form | payment_terms }}
+                  </div>
                 {%- endform -%}
+              </div>
+              
+            {%- when 'pickup-availability' -%}
+              <div class="product__pickup-availabilities" {{ block.shopify_attributes }}>
+                {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+                {%- if pick_up_availabilities.size > 0 -%}
+                  <div class="pickup-availability-preview">
+                    {%- assign closest_location = pick_up_availabilities.first -%}
+                    {%- if closest_location.available -%}
+                      <p class="caption-large" style="margin-bottom:0;">
+                        <svg viewBox="0 0 20 20" class="icon icon-checkmark" fill="none" width="14" height="14" style="margin-right: 0.5rem;"><path d="M14.28 5.72a.75.75 0 010 1.06l-6.5 6.5a.75.75 0 01-1.06 0l-3-3a.75.75 0 111.06-1.06l2.47 2.47 5.97-5.97a.75.75 0 011.06 0z" fill="currentColor"/></svg>
+                        Pickup available at <strong>{{ closest_location.location.name }}</strong>
+                      </p>
+                      <small class="caption" style="display:block; margin-top:0.2rem; color:rgba(var(--color-foreground),0.7);">Usually ready in {{ closest_location.pick_up_time }}</small>
+                    {%- else -%}
+                      <p class="caption-large" style="margin-bottom:0;">
+                        Pickup currently unavailable at <strong>{{ closest_location.location.name }}</strong>
+                      </p>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
               </div>
               
             {%- when 'makers-note' -%}
@@ -280,6 +304,15 @@
     margin: 0;
     font-size: 1.1rem;
   }
+  .product-form__payment-terms {
+    margin-top: 1rem;
+  }
+  .product__pickup-availabilities {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(var(--color-foreground), 0.03);
+    border-radius: 4px;
+  }
 </style>
 
 <script>
@@ -367,6 +400,21 @@
       this.variantData = this.variantData || JSON.parse(this.querySelector('[type="application/json"]').textContent);
       return this.variantData;
     }
+
+    updatePickupAvailability() {
+      const pickUpAvailability = document.querySelector('.product__pickup-availabilities');
+      if (!pickUpAvailability) return;
+
+      if (this.currentVariant && this.currentVariant.available) {
+        fetch(`${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`)
+          .then((response) => response.text())
+          .then((text) => {
+            const html = new DOMParser().parseFromString(text, 'text/html');
+            const newAvailability = html.querySelector('.product__pickup-availabilities');
+            if (newAvailability) pickUpAvailability.innerHTML = newAvailability.innerHTML;
+          });
+      }
+    }
   }
   customElements.define('variant-selects', VariantSelects);
 </script>
@@ -446,6 +494,11 @@
           "label": "Show dynamic checkout buttons"
         }
       ]
+    },
+    {
+      "type": "pickup-availability",
+      "name": "Pickup availability",
+      "limit": 1
     },
     {
       "type": "makers-note",

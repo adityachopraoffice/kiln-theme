@@ -67,6 +67,44 @@
       </nav>
 
       <div class="header__icons">
+        {%- if section.settings.enable_country_selector or section.settings.enable_language_selector -%}
+          <div class="header__localization">
+            {%- form 'localization', id: 'HeaderLocalizationForm', class: 'localization-form' -%}
+              {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+                <div class="localization-form__select">
+                  <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t | default: 'Country/region' }}</h2>
+                  <select name="country_code" aria-labelledby="HeaderCountryLabel" class="localization-selector link">
+                    {%- for country in localization.available_countries -%}
+                      <option value="{{ country.iso_code }}" {%- if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                        {{ country.currency.iso_code }} {{ country.currency.symbol }}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+              {%- endif -%}
+              {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+                <div class="localization-form__select">
+                  <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t | default: 'Language' }}</h2>
+                  <select name="locale_code" aria-labelledby="HeaderLanguageLabel" class="localization-selector link">
+                    {%- for language in localization.available_languages -%}
+                      <option value="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                        {{ language.endonym_name | capitalize }}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+              {%- endif -%}
+            {%- endform -%}
+            <script>
+              document.querySelectorAll('#HeaderLocalizationForm .localization-selector').forEach(selector => {
+                selector.addEventListener('change', (e) => {
+                  e.target.closest('form').submit();
+                });
+              });
+            </script>
+          </div>
+        {%- endif -%}
+
         <a href="{{ routes.search_url }}" class="header__icon header__icon--search link focus-inset">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" width="24" height="24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -133,6 +171,29 @@
     padding: 0;
     margin: 0;
     gap: 1.5rem;
+  }
+  .header__localization {
+    display: none;
+  }
+  @media screen and (min-width: 990px) {
+    .header__localization {
+      display: flex;
+      align-items: center;
+      margin-right: 1rem;
+    }
+  }
+  .localization-form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .localization-selector {
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    background-color: transparent;
+    border: none;
+    color: var(--color-foreground);
+    cursor: pointer;
+    font-size: 0.9rem;
   }
   .header__icons {
     display: flex;
@@ -305,6 +366,18 @@
       "id": "sticky_header",
       "default": true,
       "label": "Enable sticky header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "Enable country/region selector"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "Enable language selector"
     },
     {
       "type": "select",
