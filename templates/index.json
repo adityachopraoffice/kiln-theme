@@ -4,7 +4,7 @@
     "announcement-bar": {
       "type": "announcement-bar",
       "settings": {
-        "text": "Welcome to our store",
+        "text": "Worldwide shipping for unique handcrafted items.",
         "link": "",
         "color_scheme": "ash",
         "dismissible": true
@@ -16,19 +16,19 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "Handcrafted for your home"
+            "heading": "Crafted by Hand, Loved for a Lifetime"
           }
         },
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Every piece is uniquely crafted.</p>"
+            "text": "<p>Discover our unique collection of artisanal ceramics, textiles, and woodworking.</p>"
           }
         },
         "button": {
           "type": "button",
           "settings": {
-            "button_label": "Shop now",
+            "button_label": "Explore the Gallery",
             "button_link": "shopify:\/\/collections\/all"
           }
         }
@@ -39,32 +39,158 @@
         "button"
       ],
       "settings": {
-        "overlay_opacity": 30,
+        "overlay_opacity": 20,
         "color_scheme": "linen",
         "show_divider": true
       }
     },
-    "collection-grid": {
-      "type": "collection-grid",
+    "brand-story": {
+      "type": "rich-text",
       "blocks": {
-        "collection_1": {
-          "type": "collection",
+        "heading": {
+          "type": "heading",
           "settings": {
+            "heading": "Our Philosophy"
           }
         },
-        "collection_2": {
-          "type": "collection",
+        "text": {
+          "type": "text",
           "settings": {
+            "text": "<p>Every piece in our gallery is created slowly, with intention, celebrating the natural imperfections that make handmade art beautiful. We source our materials ethically and work exclusively with independent artisans.</p>"
           }
         }
       },
       "block_order": [
-        "collection_1",
-        "collection_2"
+        "heading",
+        "text"
       ],
       "settings": {
-        "heading": "Shop by category",
-        "card_style": "standard",
+        "desktop_content_position": "center",
+        "color_scheme": "clay"
+      }
+    },
+    "featured-pieces": {
+      "type": "product-list",
+      "blocks": {
+        "product_1": {
+          "type": "product",
+          "settings": {}
+        },
+        "product_2": {
+          "type": "product",
+          "settings": {}
+        },
+        "product_3": {
+          "type": "product",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "product_1",
+        "product_2",
+        "product_3"
+      ],
+      "settings": {
+        "heading": "Featured Pieces",
+        "color_scheme": "linen"
+      }
+    },
+    "process": {
+      "type": "process-steps",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "step_number": "01",
+            "title": "Sourcing",
+            "description": "<p>We begin by thoughtfully sourcing organic and sustainable materials directly from the earth.</p>"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "step_number": "02",
+            "title": "Crafting",
+            "description": "<p>Using traditional techniques passed down through generations, our artisans shape each piece by hand.</p>"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "step_number": "03",
+            "title": "Finishing",
+            "description": "<p>Every item is carefully polished, glazed, or treated, then fired or dried to perfection.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
+      "settings": {
+        "heading": "How It's Made",
+        "color_scheme": "linen"
+      }
+    },
+    "materials": {
+      "type": "material-spotlight",
+      "blocks": {
+        "mat_1": {
+          "type": "material",
+          "settings": {
+            "title": "Earthen Clay",
+            "description": "<p>Locally sourced clay rich in natural minerals.</p>"
+          }
+        },
+        "mat_2": {
+          "type": "material",
+          "settings": {
+            "title": "Organic Linen",
+            "description": "<p>Woven from flax grown without harsh chemicals.</p>"
+          }
+        },
+        "mat_3": {
+          "type": "material",
+          "settings": {
+            "title": "Reclaimed Wood",
+            "description": "<p>Rescued timber given a second life and purpose.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "mat_1",
+        "mat_2",
+        "mat_3"
+      ],
+      "settings": {
+        "heading": "Our Materials",
+        "color_scheme": "sage"
+      }
+    },
+    "artisan-profile": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Meet the Maker"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>With over two decades of experience, our master artisan pours heart and soul into every creation. The dedication to preserving heritage crafts is evident in every brushstroke, carve, and weave.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "layout": "text_first",
+        "organic_shape": true,
         "color_scheme": "linen"
       }
     }
@@ -72,6 +198,10 @@
   "order": [
     "announcement-bar",
     "studio-hero",
-    "collection-grid"
+    "brand-story",
+    "featured-pieces",
+    "process",
+    "materials",
+    "artisan-profile"
   ]
 }

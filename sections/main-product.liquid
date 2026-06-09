@@ -130,6 +130,38 @@
                 {%- endform -%}
               </div>
               
+            {%- when 'recipient-form' -%}
+              {%- if product.gift_card? -%}
+                <div class="product__recipient-form product__accordion" {{ block.shopify_attributes }}>
+                  <details>
+                    <summary style="cursor: pointer;">
+                      <h3 style="margin: 0; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;">
+                        <input type="checkbox" name="properties[__shopify_send_gift_card_to_recipient]" value="true" id="Recipient-Checkbox-{{ section.id }}" form="product-form-{{ section.id }}">
+                        <label for="Recipient-Checkbox-{{ section.id }}" style="cursor:pointer;">I want to send this as a gift</label>
+                      </h3>
+                    </summary>
+                    <div class="recipient-fields" style="padding: 1rem 0; display: flex; flex-direction: column; gap: 1rem;">
+                      <div class="field">
+                        <label for="Recipient-email-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">Recipient email</label>
+                        <input type="email" id="Recipient-email-{{ section.id }}" name="properties[Recipient email]" class="field__input" style="width:100%; padding:0.5rem; border:1px solid rgba(var(--color-foreground),0.2);" form="product-form-{{ section.id }}">
+                      </div>
+                      <div class="field">
+                        <label for="Recipient-name-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">Recipient name (Optional)</label>
+                        <input type="text" id="Recipient-name-{{ section.id }}" name="properties[Recipient name]" class="field__input" style="width:100%; padding:0.5rem; border:1px solid rgba(var(--color-foreground),0.2);" form="product-form-{{ section.id }}">
+                      </div>
+                      <div class="field">
+                        <label for="Recipient-message-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">Message (Optional)</label>
+                        <textarea id="Recipient-message-{{ section.id }}" name="properties[Message]" class="field__input" style="width:100%; padding:0.5rem; border:1px solid rgba(var(--color-foreground),0.2);" form="product-form-{{ section.id }}"></textarea>
+                      </div>
+                      <div class="field">
+                        <label for="Recipient-send-on-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">Send on (Optional)</label>
+                        <input type="date" id="Recipient-send-on-{{ section.id }}" name="properties[Send on]" class="field__input" pattern="\d{4}-\d{2}-\d{2}" style="width:100%; padding:0.5rem; border:1px solid rgba(var(--color-foreground),0.2);" form="product-form-{{ section.id }}">
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              {%- endif -%}
+              
             {%- when 'pickup-availability' -%}
               <div class="product__pickup-availabilities" {{ block.shopify_attributes }}>
                 {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
@@ -498,6 +530,11 @@
     {
       "type": "pickup-availability",
       "name": "Pickup availability",
+      "limit": 1
+    },
+    {
+      "type": "recipient-form",
+      "name": "Recipient form",
       "limit": 1
     },
     {

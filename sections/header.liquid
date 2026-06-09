@@ -105,12 +105,41 @@
           </div>
         {%- endif -%}
 
-        <a href="{{ routes.search_url }}" class="header__icon header__icon--search link focus-inset">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" width="24" height="24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-          <span class="visually-hidden">{{ 'general.search.search' | t }}</span>
-        </a>
+        <predictive-search>
+          <form action="{{ routes.search_url }}" method="get" role="search" style="position: relative;">
+            <div style="display: flex; align-items: center;">
+              <input type="search"
+                name="q"
+                value=""
+                placeholder="Search"
+                autocomplete="off"
+                style="padding: 0.5rem; width: 150px; border: 1px solid rgba(var(--color-foreground),0.2); background: transparent; color: inherit;"
+              >
+              <input type="hidden" name="options[prefix]" value="last">
+              <button aria-label="Search" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: inherit;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </button>
+            </div>
+            <div data-predictive-search style="position: absolute; top: 100%; right: 0; background: var(--color-background); border: 1px solid rgba(var(--color-foreground),0.1); width: 300px; display: none; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+          </form>
+        </predictive-search>
+
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" width="24" height="24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            <span class="visually-hidden">
+              {%- if customer -%}
+                Account
+              {%- else -%}
+                Log in
+              {%- endif -%}
+            </span>
+          </a>
+        {%- endif -%}
 
         <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" width="24" height="24">
@@ -253,6 +282,68 @@
 </style>
 
 <script>
+  class PredictiveSearch extends HTMLElement {
+    constructor() {
+      super();
+      this.input = this.querySelector('input[type="search"]');
+      this.predictiveSearchResults = this.querySelector('[data-predictive-search]');
+      this.isOpen = false;
+
+      this.input.addEventListener('input', this.debounce((event) => {
+        this.onChange(event);
+      }, 300).bind(this));
+    }
+
+    onChange() {
+      const searchTerm = this.input.value.trim();
+      if (!searchTerm.length) {
+        this.close();
+        return;
+      }
+      this.getSearchResults(searchTerm);
+    }
+
+    getSearchResults(searchTerm) {
+      fetch(`/search/suggest?q=${searchTerm}&resources[type]=product&resources[limit]=4&section_id=predictive-search`)
+        .then((response) => {
+          if (!response.ok) {
+            var error = new Error(response.status);
+            this.close();
+            throw error;
+          }
+          return response.text();
+        })
+        .then((text) => {
+          const resultsMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-predictive-search').innerHTML;
+          this.predictiveSearchResults.innerHTML = resultsMarkup;
+          this.open();
+        })
+        .catch((error) => {
+          this.close();
+          throw error;
+        });
+    }
+
+    open() {
+      this.predictiveSearchResults.style.display = 'block';
+      this.isOpen = true;
+    }
+
+    close() {
+      this.predictiveSearchResults.style.display = 'none';
+      this.isOpen = false;
+    }
+
+    debounce(fn, wait) {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+  }
+  customElements.define('predictive-search', PredictiveSearch);
+
   class StickyHeader extends HTMLElement {
     constructor() {
       super();

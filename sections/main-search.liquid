@@ -38,6 +38,46 @@
       {%- else -%}
         {%- paginate search.results by section.settings.results_per_page -%}
           <div class="main-search__results">
+            <div class="search-toolbar" style="margin-bottom: 2rem;">
+              <form id="FacetFiltersForm" class="search-toolbar__filters">
+                <input type="hidden" name="q" value="{{ search.terms | escape }}">
+                <input type="hidden" name="options[prefix]" value="last">
+                <details class="facets__disclosure">
+                  <summary class="facets__summary caption-large focus-offset" style="cursor: pointer; text-decoration: underline;">
+                    <span>Filter Results</span>
+                  </summary>
+                  <div class="facets__display" style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; padding: 1rem; background: rgba(var(--color-foreground), 0.05); border-radius: 4px;">
+                    {%- for filter in search.filters -%}
+                      <details class="facets__disclosure-inner">
+                        <summary class="facets__summary-inner" style="cursor: pointer; font-weight: bold;">
+                          <span>{{ filter.label }}</span>
+                        </summary>
+                        <div class="facets__display-inner" style="margin-top: 0.5rem;">
+                          <ul class="facets__list list-unstyled" role="list">
+                            {%- for value in filter.values -%}
+                              <li class="list-menu__item facets__item">
+                                <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}" style="cursor: pointer;">
+                                  <input type="checkbox"
+                                    name="{{ value.param_name }}"
+                                    value="{{ value.value }}"
+                                    id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                    {% if value.active %}checked{% endif %}
+                                    {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                    onchange="document.getElementById('FacetFiltersForm').submit();"
+                                  >
+                                  {{ value.label | escape }} ({{ value.count }})
+                                </label>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      </details>
+                    {%- endfor -%}
+                  </div>
+                </details>
+              </form>
+            </div>
+            
             <div class="search-grid">
               {%- for item in search.results -%}
                 <div class="search-grid__item">

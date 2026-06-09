@@ -1,33 +1,73 @@
 {
   "current": {
-    "color_clay_bg": "#C4714F",
-    "color_clay_text": "#F5F0E8",
-    "color_linen_bg": "#F5F0E8",
-    "color_linen_text": "#3D3935",
-    "color_ash_bg": "#3D3935",
-    "color_ash_text": "#F5F0E8",
-    "color_sage_bg": "#7D9B76",
-    "color_sage_text": "#F5F0E8",
+    "color_clay_bg": "#A65E44",
+    "color_clay_text": "#FAF6F0",
+    "color_linen_bg": "#FAF6F0",
+    "color_linen_text": "#2C2A28",
+    "color_ash_bg": "#2C2A28",
+    "color_ash_text": "#FAF6F0",
+    "color_sage_bg": "#6B8E73",
+    "color_sage_text": "#FAF6F0",
     "default_color_scheme": "linen",
-    "type_heading_font": "work_sans_n6",
-    "type_body_font": "work_sans_n4",
+    "type_heading_font": "playfair_display_n6",
+    "type_body_font": "lato_n4",
     "page_width": 1200,
     "section_spacing": 40,
-    "cart_type": "drawer"
+    "cart_type": "drawer",
+    "sections": {
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "about": {
+            "type": "text",
+            "settings": {
+              "heading": "Our Studio",
+              "subtext": "<p>A collective of artisans dedicated to preserving heritage crafts and creating sustainable, timeless pieces.</p>"
+            }
+          },
+          "shop": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Explore",
+              "menu": "main-menu"
+            }
+          },
+          "support": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Support",
+              "menu": "footer"
+            }
+          }
+        },
+        "block_order": [
+          "about",
+          "shop",
+          "support"
+        ],
+        "settings": {
+          "color_scheme": "linen",
+          "newsletter_heading": "Join our studio",
+          "enable_follow_on_shop": true,
+          "enable_country_selector": true,
+          "enable_language_selector": true
+        }
+      }
+    }
   },
   "presets": {
     "Kiln": {
-      "color_clay_bg": "#C4714F",
-      "color_clay_text": "#F5F0E8",
-      "color_linen_bg": "#F5F0E8",
-      "color_linen_text": "#3D3935",
-      "color_ash_bg": "#3D3935",
-      "color_ash_text": "#F5F0E8",
-      "color_sage_bg": "#7D9B76",
-      "color_sage_text": "#F5F0E8",
+      "color_clay_bg": "#A65E44",
+      "color_clay_text": "#FAF6F0",
+      "color_linen_bg": "#FAF6F0",
+      "color_linen_text": "#2C2A28",
+      "color_ash_bg": "#2C2A28",
+      "color_ash_text": "#FAF6F0",
+      "color_sage_bg": "#6B8E73",
+      "color_sage_text": "#FAF6F0",
       "default_color_scheme": "linen",
-      "type_heading_font": "work_sans_n6",
-      "type_body_font": "work_sans_n4",
+      "type_heading_font": "playfair_display_n6",
+      "type_body_font": "lato_n4",
       "page_width": 1200,
       "section_spacing": 40,
       "cart_type": "drawer"

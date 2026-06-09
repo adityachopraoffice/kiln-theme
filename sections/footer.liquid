@@ -2,20 +2,36 @@
   <div class="page-width">
     <div class="footer__content">
       
-      {%- if section.settings.menu != blank -%}
-        <div class="footer__block footer__block--menu">
-          <h2 class="footer__block-heading h4">{{ linklists[section.settings.menu].title }}</h2>
-          <ul class="footer__menu list-unstyled">
-            {%- for link in section.settings.menu.links -%}
-              <li>
-                <a href="{{ link.url }}" class="footer__menu-item"{% if link.current %} aria-current="page"{% endif %}>
-                  {{ link.title }}
-                </a>
-              </li>
-            {%- endfor -%}
-          </ul>
-        </div>
-      {%- endif -%}
+      <div class="footer__blocks-wrapper">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'link_list' -%}
+              <div class="footer__block footer__block--menu" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="footer__block-heading h4">{{ block.settings.heading | escape }}</h2>
+                {%- endif -%}
+                {%- if block.settings.menu != blank -%}
+                  <ul class="footer__menu list-unstyled">
+                    {%- for link in linklists[block.settings.menu].links -%}
+                      <li>
+                        <a href="{{ link.url }}" class="footer__menu-item"{% if link.current %} aria-current="page"{% endif %}>
+                          {{ link.title }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            {%- when 'text' -%}
+              <div class="footer__block footer__block--text" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="footer__block-heading h4">{{ block.settings.heading | escape }}</h2>
+                {%- endif -%}
+                <div class="rte" style="line-height: 1.6; opacity: 0.8; font-size: 0.95rem;">{{ block.settings.subtext }}</div>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
 
       <div class="footer__block footer__block--newsletter">
         <h2 class="footer__block-heading h4">{{ section.settings.newsletter_heading | escape }}</h2>
@@ -180,15 +196,37 @@
     border-top: 1px solid rgba(var(--color-foreground), 0.1);
   }
   .footer__content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
     margin-bottom: var(--section-spacing);
   }
   @media screen and (min-width: 750px) {
     .footer__content {
-      grid-template-columns: 1fr 1fr;
+      flex-direction: row;
+      justify-content: space-between;
     }
+  }
+  .footer__blocks-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    flex: 2;
+  }
+  @media screen and (min-width: 750px) {
+    .footer__blocks-wrapper {
+      gap: 3rem;
+    }
+  }
+  .footer__block--menu,
+  .footer__block--text {
+    flex: 1;
+    min-width: 150px;
+  }
+  .footer__block--newsletter {
+    flex: 1;
+    width: 100%;
+    max-width: 350px;
   }
   .list-unstyled {
     list-style: none;
@@ -304,12 +342,6 @@
       "default": "linen"
     },
     {
-      "type": "link_list",
-      "id": "menu",
-      "default": "footer",
-      "label": "Footer menu"
-    },
-    {
       "type": "text",
       "id": "newsletter_heading",
       "default": "Subscribe to our emails",
@@ -332,6 +364,44 @@
       "id": "enable_language_selector",
       "default": true,
       "label": "Enable language selector"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Quick links",
+          "label": "Heading"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "About the shop",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "default": "<p>Share contact information, store details, and brand content with your customers.</p>",
+          "label": "Subtext"
+        }
+      ]
     }
   ]
 }
