@@ -66,6 +66,28 @@
         </ul>
       </nav>
 
+      <predictive-search class="header__search">
+        <form action="{{ routes.search_url }}" method="get" role="search" style="position: relative; width: 100%;">
+          <div style="display: flex; align-items: center; width: 100%;">
+            <input type="search"
+              class="header__search-input"
+              name="q"
+              value=""
+              placeholder="Search"
+              autocomplete="off"
+              style="padding: 0.5rem; border: 1px solid rgba(var(--color-foreground),0.2); background: transparent; color: inherit;"
+            >
+            <input type="hidden" name="options[prefix]" value="last">
+            <button aria-label="Search" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: inherit;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </button>
+          </div>
+          <div data-predictive-search style="position: absolute; top: 100%; right: 0; background: var(--color-background); border: 1px solid rgba(var(--color-foreground),0.1); width: 100%; display: none; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+        </form>
+      </predictive-search>
+
       <div class="header__icons">
         {%- if section.settings.enable_country_selector or section.settings.enable_language_selector -%}
           <div class="header__localization">
@@ -105,26 +127,7 @@
           </div>
         {%- endif -%}
 
-        <predictive-search>
-          <form action="{{ routes.search_url }}" method="get" role="search" style="position: relative;">
-            <div style="display: flex; align-items: center;">
-              <input type="search"
-                name="q"
-                value=""
-                placeholder="Search"
-                autocomplete="off"
-                style="padding: 0.5rem; width: 150px; border: 1px solid rgba(var(--color-foreground),0.2); background: transparent; color: inherit;"
-              >
-              <input type="hidden" name="options[prefix]" value="last">
-              <button aria-label="Search" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: inherit;">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
-              </button>
-            </div>
-            <div data-predictive-search style="position: absolute; top: 100%; right: 0; background: var(--color-background); border: 1px solid rgba(var(--color-foreground),0.1); width: 300px; display: none; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
-          </form>
-        </predictive-search>
+
 
         {%- if shop.customer_accounts_enabled -%}
           <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset">
@@ -174,9 +177,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    row-gap: 1rem;
   }
   .header__heading {
     margin: 0;
+    flex: 1;
+    text-align: center;
   }
   .header__heading-link {
     display: block;
@@ -187,11 +194,35 @@
     display: none;
   }
   @media screen and (min-width: 990px) {
+    .header__inner {
+      flex-wrap: nowrap;
+    }
+    .header__heading {
+      flex: 0 0 auto;
+      text-align: left;
+    }
     .header__inline-menu {
       display: block;
     }
     .header__icon--menu {
       display: none;
+    }
+  }
+  
+  .header__search {
+    order: 4;
+    width: 100%;
+  }
+  .header__search-input {
+    width: 100%;
+  }
+  @media screen and (min-width: 990px) {
+    .header__search {
+      order: 0;
+      width: auto;
+    }
+    .header__search-input {
+      width: 200px;
     }
   }
   .list-menu--inline {
