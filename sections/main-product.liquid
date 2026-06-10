@@ -381,6 +381,9 @@
   class QuantityInput extends HTMLElement {
     constructor() {
       super();
+    }
+
+    connectedCallback() {
       this.input = this.querySelector('input');
       this.changeEvent = new Event('change', { bubbles: true });
       this.querySelectorAll('button').forEach(
@@ -390,6 +393,7 @@
 
     onButtonClick(event) {
       event.preventDefault();
+      if (!this.input) return;
       const previousValue = this.input.value;
 
       event.target.name === 'plus' ? this.input.stepUp() : this.input.stepDown();
@@ -401,7 +405,10 @@
   class VariantSelects extends HTMLElement {
     constructor() {
       super();
-      this.addEventListener('change', this.onVariantChange);
+    }
+
+    connectedCallback() {
+      this.addEventListener('change', this.onVariantChange.bind(this));
     }
 
     onVariantChange() {
