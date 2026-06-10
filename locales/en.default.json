@@ -1,4 +1,17 @@
 {
+  "customer": {
+    "account": {
+      "title": "Account"
+    },
+    "log_out": "Log out",
+    "orders": {
+      "title": "Order history"
+    }
+  },
+  "localization": {
+    "country_label": "Country/region",
+    "language_label": "Language"
+  },
   "general": {
     "accessibility": {
       "open_menu": "Open menu"
@@ -119,7 +132,8 @@
       "gift_card_code": "Gift card code",
       "copy_code": "Copy code",
       "shop_link": "Start shopping",
-      "print_gift_card": "Print gift card"
+      "print_gift_card": "Print gift card",
+      "add_to_apple_wallet": "Add to Apple Wallet"
     }
   },
   "products": {
