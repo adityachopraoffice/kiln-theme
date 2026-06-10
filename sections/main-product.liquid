@@ -410,7 +410,9 @@
       if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
     }
   }
-  customElements.define('quantity-input', QuantityInput);
+  if (!customElements.get('quantity-input')) {
+    customElements.define('quantity-input', QuantityInput);
+  }
 
   class VariantSelects extends HTMLElement {
     constructor() {
@@ -542,7 +544,9 @@
       }
     }
   }
-  customElements.define('variant-selects', VariantSelects);
+  if (!customElements.get('variant-selects')) {
+    customElements.define('variant-selects', VariantSelects);
+  }
 </script>
 
 {% schema %}
