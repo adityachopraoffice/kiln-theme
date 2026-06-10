@@ -19,6 +19,13 @@
                 alt="{{ block.settings.image.alt | escape }}"
               >
             </div>
+          {%- else -%}
+            <div class="material-spotlight__image">
+              {%- capture fallback_material -%}
+                {%- cycle 'material_clay.png', 'material_linen.png', 'material_wood.png' -%}
+              {%- endcapture -%}
+              <img src="{{ fallback_material | asset_url }}" loading="lazy" alt="Material texture">
+            </div>
           {%- endif -%}
           <div class="material-spotlight__content">
             <h3 class="h5">{{ block.settings.title | escape }}</h3>

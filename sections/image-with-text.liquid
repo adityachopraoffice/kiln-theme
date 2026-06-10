@@ -13,7 +13,10 @@
               alt="{{ section.settings.image.alt | escape }}"
             >
           {%- else -%}
-            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            <img src="{{ 'artisan_profile.png' | asset_url }}"
+              loading="lazy"
+              alt="Artisan Profile"
+            >
           {%- endif -%}
         </div>
       </div>

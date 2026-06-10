@@ -43,9 +43,10 @@
           {%- else -%}
             <div class="product-card">
               <div class="product-card__image-wrapper">
-                <div class="product-card__placeholder">
-                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-                </div>
+                {%- capture fallback_image -%}
+                  {%- cycle 'product_ceramic.png', 'product_textile.png', 'product_wood.png' -%}
+                {%- endcapture -%}
+                <img src="{{ fallback_image | asset_url }}" loading="lazy" alt="Example Product" class="product-card__image">
               </div>
               <div class="product-card__info">
                 <h3 class="h5 product-card__title">Example Product</h3>
