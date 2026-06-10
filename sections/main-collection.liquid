@@ -7,7 +7,7 @@
       {%- endif -%}
     </header>
 
-    <div class="collection-toolbar">
+    <form id="CollectionFiltersForm" class="collection-toolbar">
       <div class="collection-toolbar__filters">
         <!-- Faceted Search Placeholder (Typically requires JS to handle Shopify's filter API properly) -->
         <details class="facets__disclosure">
@@ -59,7 +59,7 @@
         <button type="button" class="view-toggle" data-view="grid" aria-label="Grid view">Grid</button>
         <button type="button" class="view-toggle" data-view="list" aria-label="List view">List</button>
       </div>
-    </div>
+    </form>
 
     {%- if collection.products.size == 0 -%}
       <div class="collection-empty">
@@ -224,6 +224,33 @@
     }
   }
 
+  .collection-list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .collection-list-view .product-card {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+  .collection-list-view .product-card__image-wrapper {
+    width: 250px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+    padding-bottom: 300px;
+  }
+  @media screen and (max-width: 749px) {
+    .collection-list-view .product-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .collection-list-view .product-card__image-wrapper {
+      width: 100%;
+      padding-bottom: 125%;
+    }
+  }
+
   .product-card {
     display: block;
     text-decoration: none;
@@ -289,10 +316,26 @@
 </style>
 
 <script>
-  document.getElementById('SortBy')?.addEventListener('change', function() {
-    const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set('sort_by', this.value);
-    window.location.search = searchParams.toString();
+  document.getElementById('CollectionFiltersForm')?.addEventListener('change', function(event) {
+    if (event.target.tagName === 'SELECT' || event.target.tagName === 'INPUT') {
+      const formData = new FormData(this);
+      const searchParams = new URLSearchParams(formData);
+      window.location.search = searchParams.toString();
+    }
+  });
+
+  document.querySelectorAll('.view-toggle').forEach(button => {
+    button.addEventListener('click', function() {
+      const view = this.dataset.view;
+      const grid = document.getElementById('ProductGridContainer');
+      if (view === 'list') {
+        grid.classList.add('collection-list-view');
+        grid.classList.remove('collection-grid');
+      } else {
+        grid.classList.add('collection-grid');
+        grid.classList.remove('collection-list-view');
+      }
+    });
   });
 </script>
 
