@@ -21,7 +21,10 @@
               >
             {%- else -%}
               <div class="process-steps__placeholder">
-                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- capture fallback_process -%}
+                  {%- cycle 'process_sourcing.png', 'process_crafting.png', 'process_finishing.png' -%}
+                {%- endcapture -%}
+                <img src="{{ fallback_process | asset_url }}" loading="lazy" alt="Process step" class="process-steps__image">
               </div>
             {%- endif -%}
           </div>
