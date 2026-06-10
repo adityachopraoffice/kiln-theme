@@ -46,6 +46,20 @@
             {%- when 'price' -%}
               <div class="product__price" id="price-{{ section.id }}" {{ block.shopify_attributes }}>
                 {%- render 'price', product: product, use_variant: true -%}
+                {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
+                  <div class="product__unit-price caption" style="margin-top: 0.5rem; color: rgba(var(--color-foreground), 0.7);">
+                    <span class="visually-hidden">Unit price</span>
+                    <span>
+                      {{- product.selected_or_first_available_variant.unit_price | money -}}
+                      <span aria-hidden="true">/</span>
+                      <span class="visually-hidden">&nbsp;per&nbsp;</span>
+                      {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+                        {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+                      {%- endif -%}
+                      {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+                    </span>
+                  </div>
+                {%- endif -%}
                 {%- if cart.taxes_included -%}
                   <div class="product__tax caption">Tax included.</div>
                 {%- endif -%}
@@ -153,8 +167,6 @@
                 {%- endform -%}
               </div>
 
-            {%- when 'pickup-availability' -%}
-              <div class="product__pickup-availabilities" {{ block.shopify_attributes }}></div>
 
             {%- when 'custom-liquid' -%}
               <div class="product__custom-liquid" {{ block.shopify_attributes }}>
