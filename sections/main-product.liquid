@@ -74,8 +74,20 @@
                               form="product-form-{{ section.id }}"
                               {% if option.selected_value == value %}checked{% endif %}
                         >
-                        <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
-                          {{ value }}
+                        <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                               class="{% if value.swatch.color or value.swatch.image %}product-form__swatch{% endif %}"
+                               {% if value.swatch.color or value.swatch.image %}
+                                  style="
+                                  {% if value.swatch.color %}--swatch-color: {{ value.swatch.color }};{% endif %}
+                                  {% if value.swatch.image %}--swatch-image: url({{ value.swatch.image | image_url: width: 50, height: 50 }});{% endif %}
+                                  "
+                               {% endif %}
+                        >
+                          {%- if value.swatch.color or value.swatch.image -%}
+                            <span class="visually-hidden">{{ value }}</span>
+                          {%- else -%}
+                            {{ value }}
+                          {%- endif -%}
                         </label>
                       {%- endfor -%}
                     </fieldset>
@@ -290,6 +302,24 @@
   .product-form__input input[type="radio"]:checked + label {
     background-color: var(--color-foreground);
     color: var(--color-background);
+  }
+  .product-form__input input[type="radio"] + label.product-form__swatch {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--swatch-color, transparent);
+    background-image: var(--swatch-image, none);
+    background-size: cover;
+    background-position: center;
+    border: 2px solid transparent;
+    box-shadow: 0 0 0 1px rgba(var(--color-foreground), 0.2);
+    display: inline-flex;
+    position: relative;
+  }
+  .product-form__input input[type="radio"]:checked + label.product-form__swatch {
+    box-shadow: 0 0 0 2px var(--color-foreground);
+    background-color: var(--swatch-color, transparent);
   }
   .quantity-input {
     display: inline-flex;
