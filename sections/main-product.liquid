@@ -4,7 +4,7 @@
       {%- if product.media.size > 0 -%}
         <div class="product__media-list">
           {%- for media in product.media -%}
-            <div class="product__media-item" data-media-id="{{ media.id }}">
+            <div class="product__media-item" data-media-id="{{ media.id }}" {% if media.preview_image %}data-image-id="{{ media.preview_image.id }}"{% endif %}>
               {%- case media.media_type -%}
                 {%- when 'image' -%}
                   <img srcset="{{ media | image_url: width: 800 }} 1x, {{ media | image_url: width: 1600 }} 2x"
@@ -506,7 +506,8 @@
       const mediaToUpdate = this.currentVariant.featured_media || this.currentVariant.featured_image;
       if (!mediaToUpdate) return;
 
-      const newMedia = document.querySelector(`[data-media-id="${mediaToUpdate.id}"]`);
+      const mediaId = mediaToUpdate.id;
+      const newMedia = document.querySelector(`[data-media-id="${mediaId}"]`) || document.querySelector(`[data-image-id="${mediaId}"]`);
       if (!newMedia) return;
 
       const mediaList = document.querySelector('.product__media-list');
