@@ -3,8 +3,41 @@
   "type": "footer",
   "sections": {
     "footer": {
-      "type": "footer"
+      "type": "footer",
+      "blocks": {
+        "about": {
+          "type": "text",
+          "settings": {
+            "heading": "Our Studio",
+            "subtext": "<p>Handcrafted with love. Every piece is unique, sustainable, and made to last a lifetime.</p>"
+          }
+        },
+        "shop": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer"
+          }
+        },
+        "support": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Support",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "about",
+        "shop",
+        "support"
+      ],
+      "settings": {
+        "color_scheme": "ash"
+      }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }
