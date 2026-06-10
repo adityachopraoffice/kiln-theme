@@ -152,6 +152,14 @@
                   </div>
                 {%- endform -%}
               </div>
+
+            {%- when 'pickup-availability' -%}
+              <div class="product__pickup-availabilities" {{ block.shopify_attributes }}></div>
+
+            {%- when 'custom-liquid' -%}
+              <div class="product__custom-liquid" {{ block.shopify_attributes }}>
+                {{ block.settings.custom_liquid }}
+              </div>
               
             {%- when 'recipient-form' -%}
               {%- if product.gift_card? -%}
