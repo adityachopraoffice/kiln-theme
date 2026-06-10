@@ -24,7 +24,7 @@
               {%- capture fallback_material -%}
                 {%- cycle 'material_clay.png', 'material_linen.png', 'material_wood.png' -%}
               {%- endcapture -%}
-              <img src="{{ fallback_material | asset_url }}" loading="lazy" alt="Material texture">
+              <img src="{{ fallback_material | asset_url }}" loading="lazy" alt="Material texture" width="800" height="800">
             </div>
           {%- endif -%}
           <div class="material-spotlight__content">

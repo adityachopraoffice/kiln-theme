@@ -46,7 +46,7 @@
                 {%- capture fallback_image -%}
                   {%- cycle 'product_ceramic.png', 'product_textile.png', 'product_wood.png' -%}
                 {%- endcapture -%}
-                <img src="{{ fallback_image | asset_url }}" loading="lazy" alt="Example Product" class="product-card__image">
+                <img src="{{ fallback_image | asset_url }}" loading="lazy" alt="Example Product" class="product-card__image" width="800" height="800">
               </div>
               <div class="product-card__info">
                 <h3 class="h5 product-card__title">Example Product</h3>
