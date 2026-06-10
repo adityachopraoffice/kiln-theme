@@ -309,6 +309,11 @@
     position: sticky;
     top: 0;
     z-index: 250;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: color-mix(in srgb, var(--color-background) 85%, transparent);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease;
   }
 </style>
 

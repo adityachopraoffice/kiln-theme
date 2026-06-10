@@ -14,49 +14,49 @@
         "type": "color",
         "id": "color_clay_bg",
         "label": "Clay background",
-        "default": "#C4714F"
+        "default": "#EBE5DF"
       },
       {
         "type": "color",
         "id": "color_clay_text",
         "label": "Clay foreground",
-        "default": "#F5F0E8"
+        "default": "#2A2522"
       },
       {
         "type": "color",
         "id": "color_linen_bg",
         "label": "Linen background",
-        "default": "#F5F0E8"
+        "default": "#FAFAFA"
       },
       {
         "type": "color",
         "id": "color_linen_text",
         "label": "Linen foreground",
-        "default": "#3D3935"
+        "default": "#111111"
       },
       {
         "type": "color",
         "id": "color_ash_bg",
         "label": "Ash background",
-        "default": "#3D3935"
+        "default": "#1A1A1A"
       },
       {
         "type": "color",
         "id": "color_ash_text",
         "label": "Ash foreground",
-        "default": "#F5F0E8"
+        "default": "#F5F5F5"
       },
       {
         "type": "color",
         "id": "color_sage_bg",
         "label": "Sage background",
-        "default": "#7D9B76"
+        "default": "#E3E8E1"
       },
       {
         "type": "color",
         "id": "color_sage_text",
         "label": "Sage foreground",
-        "default": "#F5F0E8"
+        "default": "#202B1D"
       },
       {
         "type": "select",
