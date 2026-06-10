@@ -450,12 +450,21 @@
     }
 
     renderProductInfo() {
-      // Basic implementation for price and availability update
-      if(this.currentVariant.available) {
-        this.toggleAddButton(false, 'Add to cart');
-      } else {
-        this.toggleAddButton(true, 'Sold out');
-      }
+      fetch(`${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`)
+        .then((response) => response.text())
+        .then((responseText) => {
+          const html = new DOMParser().parseFromString(responseText, 'text/html');
+          const destination = document.getElementById(`price-${this.dataset.section}`);
+          const source = html.getElementById(`price-${this.dataset.section}`);
+
+          if (source && destination) destination.innerHTML = source.innerHTML;
+
+          if(this.currentVariant.available) {
+            this.toggleAddButton(false, 'Add to cart');
+          } else {
+            this.toggleAddButton(true, 'Sold out');
+          }
+        });
     }
 
     toggleAddButton(disable = true, text, modifyClass = true) {
@@ -486,9 +495,10 @@
 
     updateMedia() {
       if (!this.currentVariant) return;
-      if (!this.currentVariant.featured_media) return;
+      const mediaToUpdate = this.currentVariant.featured_media || this.currentVariant.featured_image;
+      if (!mediaToUpdate) return;
 
-      const newMedia = document.querySelector(`[data-media-id="${this.currentVariant.featured_media.id}"]`);
+      const newMedia = document.querySelector(`[data-media-id="${mediaToUpdate.id}"]`);
       if (!newMedia) return;
 
       const mediaList = document.querySelector('.product__media-list');
