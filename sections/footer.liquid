@@ -175,27 +175,16 @@
       <div class="footer__copyright">
         {%- if shop.policies != empty -%}
           <ul class="policies list-unstyled">
-            {%- assign has_shipping = false -%}
-            {%- assign has_subscription = false -%}
             {%- for policy in shop.policies -%}
               {%- if policy != blank -%}
                 <li><small class="copyright__content"><a href="{{ policy.url }}" class="link">{{ policy.title }}</a></small></li>
-                {%- if policy.url contains 'shipping-policy' -%}{%- assign has_shipping = true -%}{%- endif -%}
-                {%- if policy.url contains 'subscription-policy' -%}{%- assign has_subscription = true -%}{%- endif -%}
               {%- endif -%}
             {%- endfor -%}
-            {%- if has_shipping == false -%}
-              <li><small class="copyright__content"><a href="/policies/shipping-policy" class="link">Shipping policy</a></small></li>
-            {%- endif -%}
-            {%- if has_subscription == false -%}
-              <li><small class="copyright__content"><a href="/policies/subscription-policy" class="link">Cancellation policy</a></small></li>
-            {%- endif -%}
-            <li><small class="copyright__content"><a href="/policies/contact-information" class="link">Contact information</a></small></li>
           </ul>
         {%- else -%}
           <ul class="policies list-unstyled">
-            <li><small class="copyright__content"><a href="/policies/shipping-policy" class="link">Shipping policy</a></small></li>
-            <li><small class="copyright__content"><a href="/policies/subscription-policy" class="link">Cancellation policy</a></small></li>
+            <li><small class="copyright__content"><a href="/policies/privacy-policy" class="link">Privacy policy</a></small></li>
+            <li><small class="copyright__content"><a href="/policies/terms-of-service" class="link">Terms of service</a></small></li>
             <li><small class="copyright__content"><a href="/policies/contact-information" class="link">Contact information</a></small></li>
           </ul>
         {%- endif -%}
@@ -301,8 +290,17 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
     margin-bottom: 0.5rem;
+  }
+  .policies li {
+    position: relative;
+  }
+  .policies li:not(:last-child)::after {
+    content: "•";
+    position: absolute;
+    right: -1rem;
+    color: rgba(var(--color-foreground), 0.5);
   }
   .footer__follow-on-shop {
     margin-bottom: 1rem;
