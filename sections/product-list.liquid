@@ -41,7 +41,7 @@
               </div>
             </a>
           {%- else -%}
-            <div class="product-card">
+            <a href="#" class="product-card" onclick="alert('This is a placeholder product. Assign real products in the Theme Editor to link to their product pages.'); return false;">
               <div class="product-card__image-wrapper">
                 {%- capture fallback_image -%}
                   {%- cycle 'product_ceramic.png', 'product_textile.png', 'product_wood.png' -%}
@@ -54,7 +54,7 @@
                   <span class="price-item--regular">$19.99</span>
                 </div>
               </div>
-            </div>
+            </a>
           {%- endif -%}
         </div>
       {%- endfor -%}
