@@ -93,7 +93,16 @@
                     </fieldset>
                   {%- endfor -%}
                   <script type="application/json">
-                    {{ product.variants | json }}
+                    [
+                      {%- for variant in product.variants -%}
+                        {
+                          "id": {{ variant.id | json }},
+                          "options": {{ variant.options | json }},
+                          "available": {{ variant.available | json }},
+                          "featured_media": {{ variant.featured_media | json }}
+                        }{% unless forloop.last %},{% endunless %}
+                      {%- endfor -%}
+                    ]
                   </script>
                 </variant-selects>
               {%- endunless -%}
