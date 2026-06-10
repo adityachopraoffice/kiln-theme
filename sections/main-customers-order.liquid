@@ -32,7 +32,17 @@
               {%- endif -%}
             </td>
             <td style="padding: 1rem 0; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">
-              {{ line_item.price | money }}
+              {%- if line_item.original_price != line_item.final_price -%}
+                <dl style="margin:0;">
+                  <dt class="visually-hidden">Regular price</dt>
+                  <dd style="margin:0;"><s>{{ line_item.original_price | money }}</s></dd>
+                  <dt class="visually-hidden">Sale price</dt>
+                  <dd style="margin:0;">{{ line_item.final_price | money }}</dd>
+                </dl>
+              {%- else -%}
+                {{ line_item.original_price | money }}
+              {%- endif -%}
+              
               {%- if line_item.unit_price_measurement -%}
                 <div class="unit-price" style="margin-top:0.25rem; font-size: 0.85em; color: rgba(var(--color-foreground), 0.7);">
                   {{ line_item.unit_price | money }} / 
@@ -41,6 +51,16 @@
                   {%- endif -%}
                   {{ line_item.unit_price_measurement.reference_unit }}
                 </div>
+              {%- endif -%}
+              
+              {%- if line_item.line_level_discount_allocations != blank -%}
+                <ul role="list" aria-label="Discount" style="list-style:none; padding:0; margin:0.5rem 0 0;">
+                  {%- for discount_allocation in line_item.line_level_discount_allocations -%}
+                    <li style="font-size: 0.85em; color: rgba(var(--color-foreground), 0.7);">
+                      {{ discount_allocation.discount_application.title }} (-{{ discount_allocation.amount | money }})
+                    </li>
+                  {%- endfor -%}
+                </ul>
               {%- endif -%}
             </td>
             <td style="padding: 1rem 0; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">
@@ -57,6 +77,20 @@
           <td colspan="3" style="padding-top: 1.5rem;">Subtotal</td>
           <td style="padding-top: 1.5rem;">{{ order.line_items_subtotal_price | money }}</td>
         </tr>
+        {%- if order.cart_level_discount_applications != blank -%}
+          <tr>
+            <td colspan="3" style="padding-top: 0.5rem; font-weight: normal;">Discount</td>
+            <td style="padding-top: 0.5rem; font-weight: normal;">
+              <ul role="list" aria-label="Discount" style="list-style:none; padding:0; margin:0;">
+                {%- for discount_application in order.cart_level_discount_applications -%}
+                  <li>
+                    {{ discount_application.title }} (-{{ discount_application.total_allocated_amount | money }})
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </td>
+          </tr>
+        {%- endif -%}
         <tr>
           <td colspan="3" style="padding-top: 0.5rem;">Total</td>
           <td style="padding-top: 0.5rem; font-size:1.2em;">{{ order.total_price | money_with_currency }}</td>
