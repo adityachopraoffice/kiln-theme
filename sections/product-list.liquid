@@ -99,15 +99,28 @@
     margin-bottom: 3rem;
   }
   
-  /* Grid Layout */
+  /* Carousel Layout */
   .product-list__items--grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    scrollbar-width: none;
+  }
+  .product-list__items--grid::-webkit-scrollbar {
+    display: none;
+  }
+  .product-list__item {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
   }
   @media screen and (min-width: 750px) {
     .product-list__items--grid {
-      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+    .product-list__item {
+      flex: 0 0 calc(25% - 1.5rem); /* Show 4 items per view */
     }
   }
 
