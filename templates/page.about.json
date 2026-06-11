@@ -1,0 +1,46 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "color_scheme": "linen"
+      }
+    },
+    "studio_hero": {
+      "type": "studio-hero",
+      "settings": {
+        "heading": "Our Studio",
+        "text": "<p>Where earth meets fire. Discover the space where our artisans bring each unique piece to life through time-honored techniques.</p>",
+        "color_scheme": "clay"
+      }
+    },
+    "origin_timeline": {
+      "type": "origin-timeline",
+      "settings": {
+        "heading": "Our Journey",
+        "color_scheme": "linen"
+      }
+    },
+    "process_steps": {
+      "type": "process-steps",
+      "settings": {
+        "heading": "The Craft",
+        "color_scheme": "ash"
+      }
+    },
+    "material_spotlight": {
+      "type": "material-spotlight",
+      "settings": {
+        "heading": "Sustainably Sourced",
+        "color_scheme": "sage"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "studio_hero",
+    "origin_timeline",
+    "process_steps",
+    "material_spotlight"
+  ]
+}
