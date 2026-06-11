@@ -6,12 +6,57 @@
   <div class="page-width">
     <div class="header__inner">
       
-      <button type="button" class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-controls="menu-drawer">
-        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-hamburger" fill="none" viewBox="0 0 18 16" width="24" height="24">
-          <path d="M1 .5a.5.5 0 100 1h15.71a.5.5 0 000-1H1zM.5 8a.5.5 0 01.5-.5h15.71a.5.5 0 010 1H1A.5.5 0 01.5 8zm0 7a.5.5 0 01.5-.5h15.71a.5.5 0 010 1H1a.5.5 0 01-.5-.5z" fill="currentColor"></path>
-        </svg>
-        <span class="visually-hidden">{{ 'general.accessibility.open_menu' | t }}</span>
-      </button>
+      <header-drawer>
+        <details id="Details-menu-drawer-container" class="menu-drawer-container">
+          <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-hamburger" fill="none" viewBox="0 0 18 16" width="24" height="24">
+              <path d="M1 .5a.5.5 0 100 1h15.71a.5.5 0 000-1H1zM.5 8a.5.5 0 01.5-.5h15.71a.5.5 0 010 1H1A.5.5 0 01.5 8zm0 7a.5.5 0 01.5-.5h15.71a.5.5 0 010 1H1a.5.5 0 01-.5-.5z" fill="currentColor"></path>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-close" fill="none" viewBox="0 0 18 17" width="24" height="24" style="display: none;">
+              <path d="M.865 15.978a.5.5 0 00.707.707l7.433-7.431 7.579 7.282a.501.501 0 00.846-.37.5.5 0 00-.153-.351L9.712 8.546l7.41-7.41a.5.5 0 10-.707-.707L8.983 7.865 1.446.56a.5.5 0 00-.707.707L8.28 8.546l-7.415 7.432z" fill="currentColor"></path>
+            </svg>
+          </summary>
+          <div id="menu-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+            <div class="menu-drawer__inner-container">
+              <div class="menu-drawer__navigation-container">
+                <nav class="menu-drawer__navigation">
+                  <ul class="menu-drawer__menu list-menu list-unstyled" role="list">
+                    {%- for link in section.settings.menu.links -%}
+                      <li>
+                        {%- if link.links != blank -%}
+                          <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
+                            <summary class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                              {{ link.title | escape }}
+                              <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false" role="presentation" class="icon icon-arrow" width="14" height="10" style="transform: rotate(-90deg); margin-left: auto;"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1.5a.5.5 0 010-1h10.293L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor"></path></svg>
+                            </summary>
+                            <div id="link-{{ link.title | escape }}" class="menu-drawer__submenu motion-reduce" tabindex="-1">
+                              <div class="menu-drawer__inner-submenu">
+                                <ul class="menu-drawer__menu list-menu list-unstyled" role="list" tabindex="-1">
+                                  {%- for childlink in link.links -%}
+                                    <li>
+                                      <a href="{{ childlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                        {{ childlink.title | escape }}
+                                      </a>
+                                    </li>
+                                  {%- endfor -%}
+                                </ul>
+                              </div>
+                            </div>
+                          </details>
+                        {%- else -%}
+                          <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                            {{ link.title | escape }}
+                          </a>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </details>
+      </header-drawer>
 
       {%- if request.page_type == 'index' -%}
         <h1 class="header__heading">
@@ -204,9 +249,61 @@
     .header__inline-menu {
       display: block;
     }
-    .header__icon--menu {
+    header-drawer {
       display: none;
     }
+  }
+
+  .menu-drawer-container {
+    display: flex;
+  }
+  .menu-drawer {
+    position: absolute;
+    transform: translateX(-100%);
+    visibility: hidden;
+    z-index: 3;
+    left: 0;
+    top: 100%;
+    width: 100vw;
+    padding: 0;
+    background-color: var(--color-background);
+    overflow-x: hidden;
+    height: calc(100vh - 100%);
+    transition: transform 0.3s ease, visibility 0.3s ease;
+  }
+  details[open] > .menu-drawer {
+    transform: translateX(0);
+    visibility: visible;
+  }
+  details[open] > summary .icon-hamburger {
+    display: none;
+  }
+  details[open] > summary .icon-close {
+    display: block !important;
+  }
+  .menu-drawer__inner-container {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 2rem;
+  }
+  .menu-drawer__menu-item {
+    padding: 1.1rem 0;
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    list-style: none;
+  }
+  .menu-drawer__submenu {
+    padding-left: 2rem;
+  }
+  details summary {
+    list-style: none;
+  }
+  details summary::-webkit-details-marker {
+    display: none;
   }
   
   .header__search {
@@ -318,6 +415,31 @@
 </style>
 
 <script>
+  class HeaderDrawer extends HTMLElement {
+    constructor() {
+      super();
+      this.details = this.querySelector('details');
+      this.summary = this.querySelector('summary');
+      this.summary.addEventListener('click', this.onSummaryClick.bind(this));
+      this.addEventListener('keyup', this.onKeyUp.bind(this));
+    }
+    onSummaryClick(event) {
+      if (this.details.hasAttribute('open')) {
+        event.preventDefault();
+        this.close();
+      } else {
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    onKeyUp(event) {
+      if (event.code.toUpperCase() === 'ESCAPE') this.close();
+    }
+    close() {
+      this.details.removeAttribute('open');
+      document.body.style.overflow = '';
+    }
+  }
+  customElements.define('header-drawer', HeaderDrawer);
   class PredictiveSearch extends HTMLElement {
     constructor() {
       super();
