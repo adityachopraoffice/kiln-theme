@@ -11,8 +11,9 @@
         <div class="product-list__item" {{ block.shopify_attributes }}>
           {%- assign product = all_products[block.settings.product] -%}
           {%- if product != empty -%}
-            <a href="{{ product.url }}" class="product-card">
-              <div class="product-card__image-wrapper">
+            <div class="product-card">
+              <a href="{{ product.url }}" style="display:block;">
+                <div class="product-card__image-wrapper">
                 {%- if product.featured_media -%}
                   <img srcset="{{ product.featured_media | image_url: width: 600 }} 1x, {{ product.featured_media | image_url: width: 1200 }} 2x"
                     src="{{ product.featured_media | image_url: width: 600 }}"
@@ -28,8 +29,11 @@
                   </div>
                 {%- endif -%}
               </div>
+              </a>
               <div class="product-card__info">
-                <h3 class="h5 product-card__title">{{ product.title }}</h3>
+                <a href="{{ product.url }}" style="text-decoration:none; color:inherit;">
+                  <h3 class="h5 product-card__title">{{ product.title }}</h3>
+                </a>
                 <div class="product-card__price">
                   {%- if product.compare_at_price > product.price -%}
                     <s class="price-item--regular">{{ product.compare_at_price | money }}</s>
@@ -38,23 +42,47 @@
                     <span class="price-item--regular">{{ product.price | money }}</span>
                   {%- endif -%}
                 </div>
+                <div class="product-card__quick-add">
+                  {%- assign product_form_id = 'quick-add-' | append: section.id | append: product.id -%}
+                  {%- form 'product', product, id: product_form_id, class: 'form' -%}
+                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                    <button type="submit" name="add" class="quick-add-button" {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+                      <span>
+                        {%- if product.selected_or_first_available_variant.available -%}
+                          {{ 'products.product.add_to_cart' | t | default: 'Add to Cart' }}
+                        {%- else -%}
+                          {{ 'products.product.sold_out' | t | default: 'Sold Out' }}
+                        {%- endif -%}
+                      </span>
+                    </button>
+                  {%- endform -%}
+                </div>
               </div>
-            </a>
+            </div>
           {%- else -%}
-            <a href="#" class="product-card" onclick="alert('This is a placeholder product. Assign real products in the Theme Editor to link to their product pages.'); return false;">
+            <div class="product-card">
+              <a href="#" style="display:block;" onclick="alert('This is a placeholder product. Assign real products in the Theme Editor to link to their product pages.'); return false;">
               <div class="product-card__image-wrapper">
                 {%- capture fallback_image -%}
                   {%- cycle 'product_ceramic.png', 'product_textile.png', 'product_wood.png' -%}
                 {%- endcapture -%}
                 <img src="{{ fallback_image | asset_url }}" loading="lazy" alt="Example Product" class="product-card__image" width="800" height="800">
               </div>
+              </a>
               <div class="product-card__info">
-                <h3 class="h5 product-card__title">Example Product</h3>
+                <a href="#" style="text-decoration:none; color:inherit;">
+                  <h3 class="h5 product-card__title">Example Product</h3>
+                </a>
                 <div class="product-card__price">
                   <span class="price-item--regular">$19.99</span>
                 </div>
+                <div class="product-card__quick-add">
+                  <button type="button" class="quick-add-button">
+                    <span>Add to Cart</span>
+                  </button>
+                </div>
               </div>
-            </a>
+            </div>
           {%- endif -%}
         </div>
       {%- endfor -%}
@@ -105,7 +133,6 @@
 
   .product-card {
     display: block;
-    text-decoration: none;
     color: inherit;
   }
   .product-card__image-wrapper {
@@ -149,6 +176,29 @@
   }
   s.price-item--regular {
     opacity: 0.7;
+  }
+  
+  .product-card__quick-add {
+    margin-top: 1rem;
+  }
+  .quick-add-button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    transition: opacity 0.3s ease;
+  }
+  .quick-add-button:hover {
+    opacity: 0.8;
+  }
+  .quick-add-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 </style>
 

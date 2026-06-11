@@ -70,8 +70,9 @@
         <div class="collection-grid {% if section.settings.asymmetric_grid %}collection-grid--asymmetric{% endif %}" id="ProductGridContainer">
           {%- for product in collection.products -%}
             <div class="collection-grid__item">
-              <a href="{{ product.url }}" class="product-card">
-                <div class="product-card__image-wrapper">
+              <div class="product-card">
+                <a href="{{ product.url }}" style="display:block;">
+                  <div class="product-card__image-wrapper">
                   {%- if product.featured_media -%}
                     <img srcset="{{ product.featured_media | image_url: width: 600 }} 1x, {{ product.featured_media | image_url: width: 1200 }} 2x"
                       src="{{ product.featured_media | image_url: width: 600 }}"
@@ -91,9 +92,12 @@
                     <span class="badge badge--sale">Sale</span>
                   {%- endif -%}
                 </div>
+                </a>
                 
                 <div class="product-card__info">
-                  <h3 class="h5 product-card__title">{{ product.title }}</h3>
+                  <a href="{{ product.url }}" style="text-decoration: none; color: inherit;">
+                    <h3 class="h5 product-card__title">{{ product.title }}</h3>
+                  </a>
                   <div class="product-card__price">
                     {%- if product.price_varies -%}
                       {%- assign price_min_money = product.price_min | money -%}
@@ -132,9 +136,24 @@
                         {%- endif -%}
                     {%- endcase -%}
                   {%- endfor -%}
+                  
+                  <div class="product-card__quick-add">
+                    {%- assign product_form_id = 'quick-add-' | append: section.id | append: product.id -%}
+                    {%- form 'product', product, id: product_form_id, class: 'form' -%}
+                      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                      <button type="submit" name="add" class="quick-add-button" {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+                        <span>
+                          {%- if product.selected_or_first_available_variant.available -%}
+                            {{ 'products.product.add_to_cart' | t | default: 'Add to Cart' }}
+                          {%- else -%}
+                            {{ 'products.product.sold_out' | t | default: 'Sold Out' }}
+                          {%- endif -%}
+                        </span>
+                      </button>
+                    {%- endform -%}
+                  </div>
                 </div>
-              </a>
-            </div>
+              </div>
           {%- endfor -%}
         </div>
 
@@ -253,7 +272,6 @@
 
   .product-card {
     display: block;
-    text-decoration: none;
     color: inherit;
   }
   .product-card__image-wrapper {
@@ -304,6 +322,28 @@
     border-radius: 2px;
     margin-top: 0.5rem;
     margin-right: 0.5rem;
+  }
+  .product-card__quick-add {
+    margin-top: 1rem;
+  }
+  .quick-add-button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    transition: opacity 0.3s ease;
+  }
+  .quick-add-button:hover {
+    opacity: 0.8;
+  }
+  .quick-add-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
   
   .pagination__list {
