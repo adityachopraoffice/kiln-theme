@@ -6,8 +6,13 @@
       </div>
     {%- endif -%}
 
-    <div class="product-list__items product-list__items--{{ section.settings.layout }}">
-      {%- for block in section.blocks -%}
+    <div class="carousel-wrapper">
+      <button type="button" class="carousel-arrow carousel-arrow--left" aria-label="Scroll left">
+        <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false" class="icon icon-arrow" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1.5a.5.5 0 010-1h10.293L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor"></path></svg>
+      </button>
+      
+      <div class="product-list__items product-list__items--{{ section.settings.layout }}" id="Carousel-{{ section.id }}">
+        {%- for block in section.blocks -%}
         <div class="product-list__item" {{ block.shopify_attributes }}>
           {%- assign product = all_products[block.settings.product] -%}
           {%- if product != empty -%}
@@ -86,6 +91,11 @@
           {%- endif -%}
         </div>
       {%- endfor -%}
+      </div>
+      
+      <button type="button" class="carousel-arrow carousel-arrow--right" aria-label="Scroll right">
+        <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false" class="icon icon-arrow" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1.5a.5.5 0 010-1h10.293L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor"></path></svg>
+      </button>
     </div>
   </div>
 </div>
@@ -100,10 +110,56 @@
   }
   
   /* Carousel Layout */
+  .carousel-wrapper {
+    position: relative;
+    display: block;
+  }
+  .carousel-arrow {
+    position: absolute;
+    top: calc(50% - 2rem - 24px); /* centered roughly on images */
+    transform: translateY(-50%);
+    z-index: 2;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .carousel-arrow:hover {
+    transform: translateY(-50%) scale(1.05);
+  }
+  .carousel-arrow--left {
+    left: -24px;
+  }
+  .carousel-arrow--left svg {
+    transform: rotate(180deg);
+  }
+  .carousel-arrow--right {
+    right: -24px;
+  }
+  .carousel-arrow[disabled] {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  @media screen and (max-width: 749px) {
+    .carousel-arrow {
+      display: none; /* Hide arrows on mobile to prefer native swiping */
+    }
+  }
+
   .product-list__items--grid {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
     gap: 1.5rem;
     padding-bottom: 2rem;
     scrollbar-width: none;
@@ -214,6 +270,47 @@
     cursor: not-allowed;
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const carousels = document.querySelectorAll('.carousel-wrapper');
+    
+    carousels.forEach(wrapper => {
+      const track = wrapper.querySelector('.product-list__items--grid');
+      if (!track) return;
+      
+      const leftArrow = wrapper.querySelector('.carousel-arrow--left');
+      const rightArrow = wrapper.querySelector('.carousel-arrow--right');
+      
+      const updateArrows = () => {
+        if (track.scrollLeft <= 0) {
+          leftArrow.setAttribute('disabled', 'true');
+        } else {
+          leftArrow.removeAttribute('disabled');
+        }
+        
+        if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 1) {
+          rightArrow.setAttribute('disabled', 'true');
+        } else {
+          rightArrow.removeAttribute('disabled');
+        }
+      };
+      
+      if (leftArrow && rightArrow) {
+        leftArrow.addEventListener('click', () => {
+          track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+        });
+        rightArrow.addEventListener('click', () => {
+          track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+        });
+        
+        track.addEventListener('scroll', updateArrows);
+        window.addEventListener('resize', updateArrows);
+        updateArrows();
+      }
+    });
+  });
+</script>
 
 {% schema %}
 {
