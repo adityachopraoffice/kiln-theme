@@ -9,27 +9,101 @@
     "studio_hero": {
       "type": "studio-hero",
       "settings": {
-        "heading": "Our Studio",
-        "text": "<p>Where earth meets fire. Discover the space where our artisans bring each unique piece to life through time-honored techniques.</p>",
+        "heading": "The Heart of the Kiln",
+        "text": "<p>Where earth meets fire. Located in the quiet outskirts of the city, our studio is a sanctuary of slow living and intentional design. It is here that raw clay is shaped by human hands, transforming simple elements into timeless artifacts for your home. We believe in the beauty of imperfection and the unique soul that only handmade goods possess.</p>",
         "color_scheme": "clay"
       }
     },
     "origin_timeline": {
       "type": "origin-timeline",
+      "blocks": {
+        "event_1": {
+          "type": "event",
+          "settings": {
+            "year": "2018",
+            "title": "The First Wheel",
+            "description": "<p>What started as a weekend hobby in a tiny garage quickly blossomed into a deep passion for ceramic arts and functional design.</p>"
+          }
+        },
+        "event_2": {
+          "type": "event",
+          "settings": {
+            "year": "2020",
+            "title": "Finding Our Voice",
+            "description": "<p>We developed our signature ash glazes, inspired by the rugged coastlines and dense forests of our childhood homes.</p>"
+          }
+        },
+        "event_3": {
+          "type": "event",
+          "settings": {
+            "year": "2023",
+            "title": "A New Home",
+            "description": "<p>We opened our current studio space, allowing us to expand our kilns and invite a community of fellow artisans to collaborate and share our vision.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "event_1",
+        "event_2",
+        "event_3"
+      ],
       "settings": {
-        "heading": "Our Journey",
+        "heading": "How We Began",
         "color_scheme": "linen"
       }
     },
     "process_steps": {
       "type": "process-steps",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "step_number": "01",
+            "title": "Sourcing the Earth",
+            "description": "<p>We begin by carefully selecting wild clays and mixing custom clay bodies that provide strength and unique textures.</p>"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "step_number": "02",
+            "title": "Throwing & Trimming",
+            "description": "<p>Each piece is individually thrown on the potter's wheel, allowing the artisan's hands to dictate subtle variations in form.</p>"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "step_number": "03",
+            "title": "The Final Firing",
+            "description": "<p>After weeks of drying and glazing, the pieces are fired to over 2,200°F. The unpredictable nature of the flame means no two pieces are ever exactly alike.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
       "settings": {
-        "heading": "The Craft",
+        "heading": "The Art of Slow Making",
         "color_scheme": "ash"
       }
     },
     "material_spotlight": {
       "type": "material-spotlight",
+      "blocks": {
+        "material_1": {
+          "type": "material",
+          "settings": {
+            "title": "Rooted in Nature",
+            "description": "<p>We are deeply committed to leaving the earth better than we found it. All of our materials are ethically sourced, and we recycle 100% of our clay scraps and trimmings. Our packaging is entirely plastic-free, utilizing biodegradable cardboard and recycled paper to ensure your ceramics arrive safely and sustainably.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "material_1"
+      ],
       "settings": {
         "heading": "Sustainably Sourced",
         "color_scheme": "sage"
