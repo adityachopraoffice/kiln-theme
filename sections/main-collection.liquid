@@ -75,6 +75,9 @@
                 </div>
               </details>
             {%- endfor -%}
+            <div style="padding-top: 1rem; border-top: 1px solid rgba(var(--color-foreground), 0.1); margin-top: 1rem;">
+              <button type="submit" class="quick-add-button" style="width: 100%;">Apply Filters</button>
+            </div>
           </div>
         </details>
       </div>
@@ -402,11 +405,18 @@
 
 <script>
   document.getElementById('CollectionFiltersForm')?.addEventListener('change', function(event) {
-    if (event.target.tagName === 'SELECT' || event.target.tagName === 'INPUT') {
+    if (event.target.tagName === 'SELECT') {
       const formData = new FormData(this);
       const searchParams = new URLSearchParams(formData);
       window.location.search = searchParams.toString();
     }
+  });
+  
+  document.getElementById('CollectionFiltersForm')?.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    const searchParams = new URLSearchParams(formData);
+    window.location.search = searchParams.toString();
   });
 
   document.querySelectorAll('.view-toggle').forEach(button => {
