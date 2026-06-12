@@ -57,14 +57,13 @@
                             {%- for value in filter.values -%}
                               <li class="list-menu__item facets__item">
                                 <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}" style="cursor: pointer;">
-                                  <input type="checkbox"
-                                    name="{{ value.param_name }}"
-                                    value="{{ value.value }}"
-                                    id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
-                                    {% if value.active %}checked{% endif %}
-                                    {% if value.count == 0 and value.active == false %}disabled{% endif %}
-                                    onchange="document.getElementById('FacetFiltersForm').submit();"
-                                  >
+                                    <input type="checkbox"
+                                      name="{{ value.param_name }}"
+                                      value="{{ value.value }}"
+                                      id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                      {% if value.active %}checked{% endif %}
+                                      {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                    >
                                   {{ value.label | escape }} ({{ value.count }})
                                 </label>
                               </li>
@@ -73,6 +72,9 @@
                         </div>
                       </details>
                     {%- endfor -%}
+                    <div style="width: 100%; margin-top: 1rem; border-top: 1px solid rgba(var(--color-foreground), 0.1); padding-top: 1rem;">
+                      <button type="submit" class="button" style="width: 100%;">Apply Filters</button>
+                    </div>
                   </div>
                 </details>
               </form>
