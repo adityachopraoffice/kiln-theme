@@ -1,7 +1,7 @@
 <div class="collection-grid color-scheme-{{ section.settings.color_scheme }}">
   <div class="page-width">
     {%- if section.settings.heading != blank -%}
-      <div class="collection-grid__header">
+      <div class="collection-grid__header animate-on-scroll">
         <h2 class="h2">{{ section.settings.heading | escape }}</h2>
         {%- if section.settings.subheading != blank -%}
           <p class="h5">{{ section.settings.subheading | escape }}</p>
@@ -11,7 +11,7 @@
 
     <div class="collection-grid__items {% if section.settings.card_style == 'asymmetric' %}collection-grid__items--asymmetric{% endif %}">
       {%- for block in section.blocks -%}
-        <div class="collection-grid__item" {{ block.shopify_attributes }}>
+        <div class="collection-grid__item animate-on-scroll" {{ block.shopify_attributes }}>
           {%- assign collection = collections[block.settings.collection] -%}
           <a href="{% if collection == empty %}#{% else %}{{ collection.url }}{% endif %}" class="collection-card">
             <div class="collection-card__image-wrapper">

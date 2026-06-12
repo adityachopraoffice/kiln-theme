@@ -1,13 +1,13 @@
 <div class="main-list-collections color-scheme-{{ section.settings.color_scheme }}">
   <div class="page-width">
-    <div class="main-list-collections__header">
+    <div class="main-list-collections__header animate-on-scroll">
       <h1 class="h1">{{ 'collections.general.title' | t }}</h1>
     </div>
 
     {%- paginate collections by section.settings.collections_per_page -%}
       <div class="collection-grid">
         {%- for collection in collections -%}
-          <div class="collection-grid__item">
+          <div class="collection-grid__item animate-on-scroll">
             <a href="{{ collection.url }}" class="collection-card">
               <div class="collection-card__image-wrapper">
                 {%- if collection.featured_image -%}

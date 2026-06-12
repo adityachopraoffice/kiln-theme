@@ -2,7 +2,7 @@
   <div class="page-width">
     <div class="image-with-text__inner {% if section.settings.layout == 'text_first' %}image-with-text__inner--reverse{% endif %}">
       
-      <div class="image-with-text__media-item">
+      <div class="image-with-text__media-item animate-on-scroll">
         <div class="image-with-text__media {% if section.settings.organic_shape %}image-with-text__media--organic{% endif %}">
           {%- if section.settings.image != blank -%}
             <img srcset="{{ section.settings.image | image_url: width: 600 }} 1x, {{ section.settings.image | image_url: width: 1200 }} 2x"
@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="image-with-text__text-item">
+      <div class="image-with-text__text-item animate-on-scroll delay-1">
         <div class="image-with-text__content">
           {%- for block in section.blocks -%}
             {%- case block.type -%}

@@ -48,8 +48,10 @@
   </style>
   
   {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'animations.css' | asset_url | stylesheet_tag }}
   
   <script src="{{ 'base.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
 </head>
 <body class="color-scheme-{{ settings.default_color_scheme | default: 'linen' }}">
   <a class="skip-to-content-link" href="#MainContent">

@@ -1,7 +1,7 @@
 <div class="rich-text color-scheme-{{ section.settings.color_scheme }} rich-text--{{ section.settings.desktop_content_position }}">
   <div class="page-width">
     <div class="rich-text__wrapper">
-      <div class="rich-text__blocks">
+      <div class="rich-text__blocks animate-on-scroll">
         {%- for block in section.blocks -%}
           {%- case block.type -%}
             {%- when 'heading' -%}

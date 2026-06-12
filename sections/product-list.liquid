@@ -1,12 +1,12 @@
 <div class="product-list color-scheme-{{ section.settings.color_scheme }}">
   <div class="page-width">
     {%- if section.settings.heading != blank -%}
-      <div class="product-list__header">
+      <div class="product-list__header animate-on-scroll">
         <h2 class="h2">{{ section.settings.heading | escape }}</h2>
       </div>
     {%- endif -%}
 
-    <div class="carousel-wrapper">
+    <div class="carousel-wrapper animate-on-scroll delay-1">
       <button type="button" class="carousel-arrow carousel-arrow--left" aria-label="Scroll left">
         <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false" class="icon icon-arrow" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1.5a.5.5 0 010-1h10.293L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor"></path></svg>
       </button>

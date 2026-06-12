@@ -1,6 +1,6 @@
 <section id="MainProduct-{{ section.id }}" class="page-width color-scheme-{{ section.settings.color_scheme }}">
   <div class="product">
-    <div class="product__media-wrapper">
+    <div class="product__media-wrapper animate-on-scroll">
       {%- if product.media.size > 0 -%}
         <div class="product__media-list">
           {%- for media in product.media -%}
@@ -31,7 +31,7 @@
       {%- endif -%}
     </div>
     
-    <div class="product__info-wrapper">
+    <div class="product__info-wrapper animate-on-scroll delay-1">
       <div id="ProductInfo-{{ section.id }}" class="product__info-container">
         {%- for block in section.blocks -%}
           {%- case block.type -%}

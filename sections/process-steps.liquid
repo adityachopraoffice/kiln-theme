@@ -1,14 +1,14 @@
 <div class="process-steps color-scheme-{{ section.settings.color_scheme }}">
   <div class="page-width">
     {%- if section.settings.heading != blank -%}
-      <div class="process-steps__header">
+      <div class="process-steps__header animate-on-scroll">
         <h2 class="h2">{{ section.settings.heading | escape }}</h2>
       </div>
     {%- endif -%}
 
     <div class="process-steps__items">
       {%- for block in section.blocks -%}
-        <div class="process-steps__item" {{ block.shopify_attributes }}>
+        <div class="process-steps__item animate-on-scroll" {{ block.shopify_attributes }}>
           <div class="process-steps__image-wrapper">
             {%- if block.settings.image != blank -%}
               <img srcset="{{ block.settings.image | image_url: width: 600 }} 1x, {{ block.settings.image | image_url: width: 1200 }} 2x"

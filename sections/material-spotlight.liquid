@@ -1,14 +1,14 @@
 <div class="material-spotlight color-scheme-{{ section.settings.color_scheme }}">
   <div class="page-width">
     {%- if section.settings.heading != blank -%}
-      <div class="material-spotlight__header">
+      <div class="material-spotlight__header animate-on-scroll">
         <h2 class="h2">{{ section.settings.heading | escape }}</h2>
       </div>
     {%- endif -%}
 
     <div class="material-spotlight__grid">
       {%- for block in section.blocks -%}
-        <div class="material-spotlight__item" {{ block.shopify_attributes }}>
+        <div class="material-spotlight__item animate-on-scroll" {{ block.shopify_attributes }}>
           {%- if block.settings.image != blank -%}
             <div class="material-spotlight__image">
               <img srcset="{{ block.settings.image | image_url: width: 200 }} 1x, {{ block.settings.image | image_url: width: 400 }} 2x"

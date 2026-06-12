@@ -1,13 +1,13 @@
 <div class="main-collection color-scheme-{{ section.settings.color_scheme }}">
   <div class="page-width">
-    <header class="collection-header">
+    <header class="collection-header animate-on-scroll">
       <h1 class="collection-header__title h1">{{ collection.title }}</h1>
       {%- if collection.description != blank -%}
         <div class="collection-header__description rte">{{ collection.description }}</div>
       {%- endif -%}
     </header>
 
-    <form id="CollectionFiltersForm" class="collection-toolbar">
+    <form id="CollectionFiltersForm" class="collection-toolbar animate-on-scroll delay-1">
       <div class="collection-toolbar__filters">
         <!-- Faceted Search Placeholder (Typically requires JS to handle Shopify's filter API properly) -->
         <details class="facets__disclosure">
@@ -107,7 +107,7 @@
       {%- paginate collection.products by section.settings.products_per_page -%}
         <div class="collection-grid {% if section.settings.asymmetric_grid %}collection-grid--asymmetric{% endif %}" id="ProductGridContainer">
           {%- for product in collection.products -%}
-            <div class="collection-grid__item">
+            <div class="collection-grid__item animate-on-scroll">
               <div class="product-card">
                 <a href="{{ product.url }}" style="display:block;">
                   <div class="product-card__image-wrapper">
