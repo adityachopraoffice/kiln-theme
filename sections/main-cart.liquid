@@ -39,9 +39,11 @@
                     
                     {%- if item.original_price != item.final_price -%}
                       <div class="cart-item__discounted-prices">
-                        <span class="visually-hidden">Regular price</span>
-                        <s class="cart-item__old-price price price--end">{{ item.original_price | money }}</s>
-                        <span class="visually-hidden">Sale price</span>
+                        <span class="visually-hidden">{{ 'cart.label.regular_price' | t }}</span>
+                        <s class="cart-item__old-price price price--end">
+                          {{ item.original_price | money }}
+                        </s>
+                        <span class="visually-hidden">{{ 'cart.label.sale_price' | t }}</span>
                         <span class="price price--end">{{ item.final_price | money }}</span>
                       </div>
                     {%- else -%}
@@ -105,9 +107,13 @@
                     <div class="cart-item__price-wrapper">
                       {%- if item.original_line_price != item.final_line_price -%}
                         <dl class="cart-item__discounted-prices">
-                          <dt class="visually-hidden">Regular price</dt>
-                          <dd><s class="cart-item__old-price price price--end">{{ item.original_line_price | money }}</s></dd>
-                          <dt class="visually-hidden">Sale price</dt>
+                          <dt class="visually-hidden">{{ 'cart.label.regular_price' | t }}</dt>
+                          <dd>
+                            <s class="cart-item__old-price price price--end">
+                              {{ item.original_line_price | money }}
+                            </s>
+                          </dd>
+                          <dt class="visually-hidden">{{ 'cart.label.sale_price' | t }}</dt>
                           <dd><span class="price price--end">{{ item.final_line_price | money }}</span></dd>
                         </dl>
                       {%- else -%}

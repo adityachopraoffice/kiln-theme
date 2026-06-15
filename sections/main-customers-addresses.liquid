@@ -1,12 +1,12 @@
 <div class="customer addresses page-width" style="padding: 4rem 0;">
-  <h1>Addresses</h1>
-  <a href="{{ routes.account_url }}">Return to Account details</a>
+  <h1>{{ 'customer.addresses.title' | t }}</h1>
+  <a href="{{ routes.account_url }}">{{ 'customer.addresses.return' | t }}</a>
 
   <div style="margin-top: 2rem;">
     {%- for address in customer.addresses -%}
       <div style="margin-bottom: 2rem; padding: 1rem; border: 1px solid rgba(var(--color-foreground), 0.1); border-radius: 4px;">
         {%- if address == customer.default_address -%}
-          <h3>Default Address</h3>
+          <h3>{{ 'customer.addresses.default' | t }}</h3>
         {%- endif -%}
         {{ address | format_address }}
       </div>

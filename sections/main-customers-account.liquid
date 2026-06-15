@@ -8,11 +8,11 @@
         <table style="width:100%; text-align:left;">
           <thead>
             <tr>
-              <th>Order</th>
-              <th>Date</th>
-              <th>Payment status</th>
-              <th>Fulfillment status</th>
-              <th>Total</th>
+              <th>{{ 'customer.account.order_history.order' | t }}</th>
+              <th>{{ 'customer.account.order_history.date' | t }}</th>
+              <th>{{ 'customer.account.order_history.payment_status' | t }}</th>
+              <th>{{ 'customer.account.order_history.fulfillment_status' | t }}</th>
+              <th>{{ 'customer.account.order_history.total' | t }}</th>
             </tr>
           </thead>
           <tbody>
@@ -28,7 +28,7 @@
           </tbody>
         </table>
       {%- else -%}
-        <p>You haven't placed any orders yet.</p>
+        <p>{{ 'customer.account.order_history.none' | t }}</p>
       {%- endif -%}
       {%- if paginate.pages > 1 -%}
         <nav role="navigation">
@@ -38,9 +38,9 @@
     {% endpaginate %}
   </div>
   <div style="margin-top: 2rem;">
-    <h2>Account details</h2>
+    <h2>{{ 'customer.account.details' | t }}</h2>
     {{ customer.default_address | format_address }}
-    <a href="{{ routes.account_addresses_url }}">View addresses ({{ customer.addresses_count }})</a>
+    <a href="{{ routes.account_addresses_url }}">{{ 'customer.account.view_addresses' | t: count: customer.addresses_count }}</a>
   </div>
 </div>
 {% schema %}

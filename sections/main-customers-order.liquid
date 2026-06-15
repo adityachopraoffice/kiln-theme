@@ -1,18 +1,18 @@
 <div class="customer order page-width" style="padding: 4rem 0;">
-  <h1>Order {{ order.name }}</h1>
-  <p>Placed on {{ order.created_at | time_tag: format: 'date_at_time' }}</p>
+  <h1>{{ 'customer.order.title' | t: name: order.name }}</h1>
+  <p>{{ 'customer.order.date' | t: date: order.created_at | time_tag: format: 'date_at_time' }}</p>
   {%- if order.cancelled -%}
-    <p>Order Cancelled on {{ order.cancelled_at | time_tag: format: 'date_at_time' }}<br>Reason: {{ order.cancel_reason_label }}</p>
+    <p>{{ 'customer.order.cancelled' | t: date: order.cancelled_at | time_tag: format: 'date_at_time' }}<br>{{ 'customer.order.cancelled_reason' | t: reason: order.cancel_reason_label }}</p>
   {%- endif -%}
 
   <div style="margin-top: 2rem;">
     <table style="width:100%; text-align:left; border-collapse: collapse;">
       <thead>
         <tr>
-          <th style="padding-bottom: 1rem; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">Product</th>
-          <th style="padding-bottom: 1rem; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">Price</th>
-          <th style="padding-bottom: 1rem; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">Quantity</th>
-          <th style="padding-bottom: 1rem; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">Total</th>
+          <th style="padding-bottom: 1rem; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">{{ 'customer.order.product' | t }}</th>
+          <th style="padding-bottom: 1rem; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">{{ 'customer.order.price' | t }}</th>
+          <th style="padding-bottom: 1rem; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">{{ 'customer.order.quantity' | t }}</th>
+          <th style="padding-bottom: 1rem; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">{{ 'customer.order.total' | t }}</th>
         </tr>
       </thead>
       <tbody>
@@ -34,9 +34,9 @@
             <td style="padding: 1rem 0; border-bottom: 1px solid rgba(var(--color-foreground), 0.1);">
               {%- if line_item.original_price != line_item.final_price -%}
                 <dl style="margin:0;">
-                  <dt class="visually-hidden">Regular price</dt>
+                  <dt class="visually-hidden">{{ 'cart.label.regular_price' | t }}</dt>
                   <dd style="margin:0;"><s>{{ line_item.original_price | money }}</s></dd>
-                  <dt class="visually-hidden">Sale price</dt>
+                  <dt class="visually-hidden">{{ 'cart.label.sale_price' | t }}</dt>
                   <dd style="margin:0;">{{ line_item.final_price | money }}</dd>
                 </dl>
               {%- else -%}
@@ -74,12 +74,12 @@
       </tbody>
       <tfoot style="font-weight: bold;">
         <tr>
-          <td colspan="3" style="padding-top: 1.5rem;">Subtotal</td>
+          <td colspan="3" style="padding-top: 1.5rem;">{{ 'customer.order.subtotal' | t }}</td>
           <td style="padding-top: 1.5rem;">{{ order.line_items_subtotal_price | money }}</td>
         </tr>
         {%- if order.cart_level_discount_applications != blank -%}
           <tr>
-            <td colspan="3" style="padding-top: 0.5rem; font-weight: normal;">Discount</td>
+            <td colspan="3" style="padding-top: 0.5rem; font-weight: normal;">{{ 'customer.order.discount' | t }}</td>
             <td style="padding-top: 0.5rem; font-weight: normal;">
               <ul role="list" aria-label="Discount" style="list-style:none; padding:0; margin:0;">
                 {%- for discount_application in order.cart_level_discount_applications -%}
@@ -92,7 +92,7 @@
           </tr>
         {%- endif -%}
         <tr>
-          <td colspan="3" style="padding-top: 0.5rem;">Total</td>
+          <td colspan="3" style="padding-top: 0.5rem;">{{ 'customer.order.total' | t }}</td>
           <td style="padding-top: 0.5rem; font-size:1.2em;">{{ order.total_price | money_with_currency }}</td>
         </tr>
       </tfoot>
@@ -101,14 +101,14 @@
   
   <div style="margin-top: 3rem; display: flex; gap: 4rem; flex-wrap: wrap;">
     <div>
-      <h2>Billing Address</h2>
-      <p><strong>Payment Status:</strong> {{ order.financial_status_label }}</p>
+      <h2>{{ 'customer.order.billing_address' | t }}</h2>
+      <p><strong>{{ 'customer.order.payment_status' | t }}</strong> {{ order.financial_status_label }}</p>
       {{ order.billing_address | format_address }}
     </div>
 
     <div>
-      <h2>Shipping Address</h2>
-      <p><strong>Fulfillment Status:</strong> {{ order.fulfillment_status_label }}</p>
+      <h2>{{ 'customer.order.shipping_address' | t }}</h2>
+      <p><strong>{{ 'customer.order.fulfillment_status' | t }}</strong> {{ order.fulfillment_status_label }}</p>
       {{ order.shipping_address | format_address }}
     </div>
   </div>

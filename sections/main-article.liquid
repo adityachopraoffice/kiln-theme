@@ -7,7 +7,7 @@
         <span class="article__date" itemprop="datePublished">{{ article.published_at | time_tag: format: 'date' }}</span>
         {%- if article.author != blank -%}
           <span class="article__author" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            <span itemprop="name">by {{ article.author }}</span>
+            <span itemprop="name">{{ 'blogs.article.by_author' | t: author: article.author }}</span>
           </span>
         {%- endif -%}
       </div>

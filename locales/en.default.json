@@ -1,12 +1,50 @@
 {
   "customer": {
-    "account": {
-      "title": "Account"
+    "login_page": {
+      "title": "Login",
+      "sign_in": "Sign In",
+      "create_account": "Create account"
     },
-    "log_out": "Log out",
-    "orders": {
-      "title": "Order history"
-    }
+    "register": {
+      "title": "Create Account",
+      "submit": "Create"
+    },
+    "addresses": {
+      "title": "Addresses",
+      "return": "Return to Account details",
+      "default": "Default Address"
+    },
+    "order": {
+      "title": "Order {{ name }}",
+      "date": "Placed on {{ date }}",
+      "cancelled": "Order Cancelled on {{ date }}",
+      "cancelled_reason": "Reason: {{ reason }}",
+      "product": "Product",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "billing_address": "Billing Address",
+      "payment_status": "Payment Status:",
+      "shipping_address": "Shipping Address",
+      "fulfillment_status": "Fulfillment Status:"
+    },
+    "account": {
+      "title": "Account",
+      "details": "Account details",
+      "view_addresses": "View addresses ({{ count }})",
+      "order_history": {
+        "title": "Order history",
+        "order": "Order",
+        "date": "Date",
+        "payment_status": "Payment status",
+        "fulfillment_status": "Fulfillment status",
+        "total": "Total",
+        "none": "You haven't placed any orders yet."
+      }
+    },
+    "log_out": "Log out"
   },
   "localization": {
     "country_label": "Country/region",
@@ -54,7 +92,11 @@
       "search": "Search",
       "no_results": "No results found.",
       "results_with_count": "{{ count }} results found for \"{{ terms }}\"",
-      "title": "Search"
+      "title": "Search",
+      "filter_results": "Filter Results",
+      "clear_filters": "Clear all filters",
+      "apply_filters": "Apply Filters",
+      "page": "Page"
     },
     "404": {
       "title": "Page not found",
@@ -91,7 +133,8 @@
       "post": "Post comment",
       "back_to_blog": "Back to blog",
       "share": "Share this article",
-      "success": "Your comment was posted successfully! We will publish it in a little while, as our blog is moderated."
+      "success": "Your comment was posted successfully! We will publish it in a little while, as our blog is moderated.",
+      "by_author": "by {{ author }}"
     }
   },
   "cards": {
@@ -115,7 +158,9 @@
       "product": "Product",
       "price": "Price",
       "quantity": "Quantity",
-      "total": "Total"
+      "total": "Total",
+      "regular_price": "Regular price",
+      "sale_price": "Sale price"
     }
   },
   "collections": {
