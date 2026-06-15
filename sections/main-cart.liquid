@@ -91,6 +91,9 @@
                         name="updates[]"
                         value="{{ item.quantity }}"
                         min="0"
+                        {% if item.variant.inventory_management == 'shopify' and item.variant.inventory_policy == 'deny' %}
+                          max="{{ item.variant.inventory_quantity }}"
+                        {% endif %}
                         id="Quantity-{{ item.index | plus: 1 }}"
                         data-index="{{ item.index | plus: 1 }}"
                       >
@@ -334,8 +337,9 @@
     btn.addEventListener('click', function() {
       const input = this.parentElement.querySelector('.quantity-input__input');
       let value = parseInt(input.value, 10);
+      const max = input.hasAttribute('max') ? parseInt(input.getAttribute('max'), 10) : Infinity;
       if (this.name === 'plus') {
-        value++;
+        value = Math.min(value + 1, max);
       } else {
         value = Math.max(0, value - 1);
       }

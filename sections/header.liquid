@@ -34,9 +34,29 @@
                                 <ul class="menu-drawer__menu list-menu list-unstyled" role="list" tabindex="-1">
                                   {%- for childlink in link.links -%}
                                     <li>
-                                      <a href="{{ childlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
-                                        {{ childlink.title | escape }}
-                                      </a>
+                                      {%- if childlink.links == blank -%}
+                                        <a href="{{ childlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                          {{ childlink.title | escape }}
+                                        </a>
+                                      {%- else -%}
+                                        <details id="Details-menu-drawer-submenu-{{ forloop.index }}">
+                                          <summary class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                            {{ childlink.title | escape }}
+                                            <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false" role="presentation" class="icon icon-arrow" width="14" height="10" style="transform: rotate(-90deg); margin-left: auto;"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1.5a.5.5 0 010-1h10.293L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor"></path></svg>
+                                          </summary>
+                                          <div id="childlink-{{ childlink.title | escape }}" class="menu-drawer__submenu motion-reduce">
+                                            <ul class="menu-drawer__menu list-menu list-unstyled" role="list" tabindex="-1">
+                                              {%- for grandchildlink in childlink.links -%}
+                                                <li>
+                                                  <a href="{{ grandchildlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                                    {{ grandchildlink.title | escape }}
+                                                  </a>
+                                                </li>
+                                              {%- endfor -%}
+                                            </ul>
+                                          </div>
+                                        </details>
+                                      {%- endif -%}
                                     </li>
                                   {%- endfor -%}
                                 </ul>
@@ -70,6 +90,7 @@
                 width="{{ section.settings.logo_width }}"
                 height="{{ logo_height }}"
                 alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+                class="header__heading-logo"
               >
             {%- else -%}
               <span class="h2">{{ shop.name }}</span>
@@ -93,9 +114,29 @@
                     <ul class="header__submenu list-menu list-menu--disclosure caption-large motion-reduce" role="list" tabindex="-1">
                       {%- for childlink in link.links -%}
                         <li>
-                          <a href="{{ childlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if childlink.current %} list-menu__item--active{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
-                            {{ childlink.title | escape }}
-                          </a>
+                          {%- if childlink.links == blank -%}
+                            <a href="{{ childlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if childlink.current %} list-menu__item--active{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                              {{ childlink.title | escape }}
+                            </a>
+                          {%- else -%}
+                            <details-disclosure>
+                              <details>
+                                <summary class="header__menu-item list-menu__item link link--text focus-inset caption-large">
+                                  {{ childlink.title | escape }}
+                                  <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false" role="presentation" class="icon icon-caret" width="10" height="10" style="margin-left: 0.5rem; transform: rotate(-90deg);"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1.5a.5.5 0 010-1h10.293L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor"></path></svg>
+                                </summary>
+                                <ul class="header__submenu header__submenu--nested list-menu list-menu--disclosure caption-large motion-reduce" role="list" tabindex="-1">
+                                  {%- for grandchildlink in childlink.links -%}
+                                    <li>
+                                      <a href="{{ grandchildlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"{% if grandchildlink.current %} aria-current="page"{% endif %}>
+                                        {{ grandchildlink.title | escape }}
+                                      </a>
+                                    </li>
+                                  {%- endfor -%}
+                                </ul>
+                              </details>
+                            </details-disclosure>
+                          {%- endif -%}
                         </li>
                       {%- endfor -%}
                     </ul>
@@ -234,6 +275,16 @@
     display: block;
     text-decoration: none;
     line-height: 1.2;
+    word-break: break-word; /* Handle long shop names without spaces */
+  }
+  .header__heading-logo {
+    max-width: 100%;
+    height: auto;
+    max-height: 150px; /* Prevent portrait logos from making header massive */
+    object-fit: contain;
+  }
+  .header__menu-item {
+    word-break: break-word; /* Handle long menu titles */
   }
   .header__inline-menu {
     display: none;
@@ -252,6 +303,11 @@
     header-drawer {
       display: none;
     }
+  }
+
+  .header__heading-link:focus-visible, .header__icon:focus-visible, .header__menu-item:focus-visible, .menu-drawer__menu-item:focus-visible, summary:focus-visible, input:focus-visible, button:focus-visible, select:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
   }
 
   .menu-drawer-container {
@@ -392,6 +448,10 @@
     min-width: 200px;
     padding: 1rem;
     z-index: 100;
+  }
+  .header__submenu--nested {
+    top: 0;
+    left: 100%;
   }
   details[open] > .header__submenu {
     display: block;

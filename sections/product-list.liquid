@@ -12,9 +12,14 @@
       </button>
       
       <div class="product-list__items product-list__items--{{ section.settings.layout }}" id="Carousel-{{ section.id }}">
-        {%- for block in section.blocks -%}
-        <div class="product-list__item" {{ block.shopify_attributes }}>
-          {%- assign product = all_products[block.settings.product] -%}
+        {%- assign collection = section.settings.collection -%}
+        {%- assign products_to_display = collection.products -%}
+        {%- if products_to_display == empty or products_to_display == blank -%}
+          {%- assign products_to_display = collections['all'].products -%}
+        {%- endif -%}
+
+        {%- for product in products_to_display limit: section.settings.products_to_show -%}
+        <div class="product-list__item">
           {%- if product != empty -%}
             <div class="product-card">
               <a href="{{ product.url }}" style="display:block;">
@@ -61,30 +66,6 @@
                       </span>
                     </button>
                   {%- endform -%}
-                </div>
-              </div>
-            </div>
-          {%- else -%}
-            <div class="product-card">
-              <a href="#" style="display:block;" onclick="alert('This is a placeholder product. Assign real products in the Theme Editor to link to their product pages.'); return false;">
-              <div class="product-card__image-wrapper">
-                {%- capture fallback_image -%}
-                  {%- cycle 'product_ceramic.png', 'product_textile.png', 'product_wood.png' -%}
-                {%- endcapture -%}
-                <img src="{{ fallback_image | asset_url }}" loading="lazy" alt="Example Product" class="product-card__image" width="800" height="800">
-              </div>
-              </a>
-              <div class="product-card__info">
-                <a href="#" style="text-decoration:none; color:inherit;">
-                  <h3 class="h5 product-card__title">Example Product</h3>
-                </a>
-                <div class="product-card__price">
-                  <span class="price-item--regular">$19.99</span>
-                </div>
-                <div class="product-card__quick-add">
-                  <button type="button" class="quick-add-button">
-                    <span>Add to Cart</span>
-                  </button>
                 </div>
               </div>
             </div>
@@ -308,6 +289,30 @@
         window.addEventListener('resize', updateArrows);
         updateArrows();
       }
+
+      // Auto-rotate functionality
+      let autoRotateInterval;
+      const startAutoRotate = () => {
+        autoRotateInterval = setInterval(() => {
+          if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 1) {
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            // Scroll by one item roughly
+            const itemWidth = track.querySelector('.product-list__item')?.clientWidth || track.clientWidth;
+            track.scrollBy({ left: itemWidth, behavior: 'smooth' });
+          }
+        }, 2000);
+      };
+
+      const stopAutoRotate = () => {
+        clearInterval(autoRotateInterval);
+      };
+
+      startAutoRotate();
+      wrapper.addEventListener('mouseenter', stopAutoRotate);
+      wrapper.addEventListener('mouseleave', startAutoRotate);
+      wrapper.addEventListener('touchstart', stopAutoRotate, {passive: true});
+      wrapper.addEventListener('touchend', startAutoRotate, {passive: true});
     });
   });
 </script>
@@ -315,13 +320,26 @@
 {% schema %}
 {
   "name": "Product list",
-  "max_blocks": 12,
   "settings": [
     {
       "type": "text",
       "id": "heading",
       "default": "Featured products",
       "label": "Heading"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Maximum products to show"
     },
     {
       "type": "select",
@@ -364,36 +382,9 @@
       "default": "linen"
     }
   ],
-  "blocks": [
-    {
-      "type": "product",
-      "name": "Product",
-      "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product"
-        }
-      ]
-    }
-  ],
   "presets": [
     {
-      "name": "Product list",
-      "blocks": [
-        {
-          "type": "product"
-        },
-        {
-          "type": "product"
-        },
-        {
-          "type": "product"
-        },
-        {
-          "type": "product"
-        }
-      ]
+      "name": "Product list"
     }
   ]
 }

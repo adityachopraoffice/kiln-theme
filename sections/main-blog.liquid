@@ -132,10 +132,20 @@
   }
   .blog-card__title {
     margin: 0 0 1rem 0;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .blog-card__excerpt {
     margin-bottom: 1.5rem;
     flex-grow: 1;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .blog-card__read-more {
     align-self: flex-start;

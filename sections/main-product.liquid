@@ -15,11 +15,17 @@
                     alt="{{ media.alt | default: product.title | escape }}"
                   >
                 {%- when 'external_video' -%}
-                  {{ media | external_video_tag }}
+                  <div class="product__media-video" style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <iframe src="{{ media | external_video_url }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                  </div>
                 {%- when 'video' -%}
-                  {{ media | video_tag: controls: true }}
+                  {{ media | video_tag: controls: true, style: 'width: 100%; height: auto;' }}
                 {%- when 'model' -%}
-                  {{ media | model_viewer_tag }}
+                  {{ media | model_viewer_tag: style: 'width: 100%; height: 400px;' }}
+                  <button class="button button--full-width product__xr-button" type="button" aria-label="View in your space" data-shopify-xr data-shopify-model3d-id="{{ media.id }}" data-shopify-title="{{ product.title | escape }}" data-shopify-xr-hidden>
+                    <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-3d" viewBox="18.24 17.35 24.52 28.3" width="20" height="20" style="margin-right: 0.5rem;"><path fill="currentColor" d="M30.5 17.35l-12.26 7.07v14.16l12.26 7.07 12.26-7.08V24.42L30.5 17.35zM20.24 37.42V25.58l10.26-5.92v11.84l-10.26 5.92zm11.26-12.98l-10.26-5.92 10.26-5.92 10.26 5.92-10.26 5.92zm1.06 12.98l10.26-5.92V25.58l-10.26 5.92v11.84z"></path></svg>
+                    View in your space
+                  </button>
               {%- endcase -%}
             </div>
           {%- endfor -%}
@@ -128,16 +134,19 @@
                   {{ 'products.product.quantity.label' | t }}
                 </label>
                 <quantity-input class="quantity-input">
-                  <button class="quantity-input__button no-js-hidden" name="minus" type="button">-</button>
+                  <button class="quantity-input__button no-js-hidden" name="minus" type="button" aria-label="Decrease quantity">-</button>
                   <input class="quantity-input__input"
                       type="number"
                       name="quantity"
                       id="Quantity-{{ section.id }}"
                       min="1"
+                      {% if product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_policy == 'deny' %}
+                        max="{{ product.selected_or_first_available_variant.inventory_quantity }}"
+                      {% endif %}
                       value="1"
                       form="product-form-{{ section.id }}"
                     >
-                  <button class="quantity-input__button no-js-hidden" name="plus" type="button">+</button>
+                  <button class="quantity-input__button no-js-hidden" name="plus" type="button" aria-label="Increase quantity">+</button>
                 </quantity-input>
               </div>
               
@@ -146,6 +155,23 @@
                 {%- assign product_form_id = 'product-form-' | append: section.id -%}
                 {%- form 'product', product, id: product_form_id, class: 'form' -%}
                   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  
+                  {%- if product.selling_plan_groups.size > 0 -%}
+                    <div class="product-form__selling-plans" style="margin-top: 1rem;">
+                      <label class="form__label" for="SellingPlan-{{ section.id }}">Purchase options</label>
+                      <select name="selling_plan" id="SellingPlan-{{ section.id }}" class="field__input" style="width: 100%;">
+                        <option value="">One-time purchase</option>
+                        {%- for group in product.selling_plan_groups -%}
+                          <optgroup label="{{ group.name }}">
+                            {%- for plan in group.selling_plans -%}
+                              <option value="{{ plan.id }}">{{ plan.name }}</option>
+                            {%- endfor -%}
+                          </optgroup>
+                        {%- endfor -%}
+                      </select>
+                    </div>
+                  {%- endif -%}
+
                   <div class="product-form__buttons">
                     <button type="submit" name="add" class="product-form__submit button button--full-width"
                       {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
@@ -167,6 +193,40 @@
                 {%- endform -%}
               </div>
 
+
+            {%- when 'complementary-products' -%}
+              <div class="product__complementary" {{ block.shopify_attributes }}>
+                <complementary-products class="complementary-products" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.product_list_limit }}&intent=complementary">
+                  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+                    <h3 class="h4" style="margin-bottom: 1rem; font-size: 1.1rem;">{{ block.settings.heading }}</h3>
+                    <ul class="complementary-products__list list-unstyled" role="list">
+                      {%- for recommended_product in recommendations.products -%}
+                        <li class="complementary-products__item" style="margin-bottom: 1rem; display: flex; gap: 1rem; align-items: center; border: 1px solid rgba(var(--color-foreground),0.1); padding: 0.5rem; border-radius: 4px;">
+                          {%- if recommended_product.featured_media -%}
+                            <img src="{{ recommended_product.featured_media | image_url: width: 100 }}" alt="{{ recommended_product.featured_media.alt | escape }}" width="60" height="{{ 60 | divided_by: recommended_product.featured_media.aspect_ratio | ceil }}" loading="lazy" style="border-radius: 4px; object-fit: cover;">
+                          {%- endif -%}
+                          <div style="flex: 1;">
+                            <a href="{{ recommended_product.url }}" class="link link--text" style="text-decoration: none; font-weight: bold; display: block; margin-bottom: 0.25rem;">
+                              {{ recommended_product.title }}
+                            </a>
+                            <div class="caption">{{ recommended_product.price | money }}</div>
+                          </div>
+                          {%- form 'product', recommended_product, class: 'complementary-form' -%}
+                            <input type="hidden" name="id" value="{{ recommended_product.selected_or_first_available_variant.id }}">
+                            <button type="submit" name="add" class="button button--secondary button--small" style="padding: 0.5rem 1rem; font-size: 0.8rem;" {% unless recommended_product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+                              {%- if recommended_product.selected_or_first_available_variant.available -%}
+                                Add
+                              {%- else -%}
+                                Sold out
+                              {%- endif -%}
+                            </button>
+                          {%- endform -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </complementary-products>
+              </div>
 
             {%- when 'custom-liquid' -%}
               <div class="product__custom-liquid" {{ block.shopify_attributes }}>
@@ -264,6 +324,17 @@
     </div>
   </div>
 </section>
+
+{%- if product.media.size > 0 -%}
+  <script src="{{ 'shopify-xr.js' | shopify_asset_url }}" defer="defer"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.ShopifyXR) {
+        window.ShopifyXR.addModels({{ product.media | where: 'media_type', 'model' | json }});
+      }
+    });
+  </script>
+{%- endif -%}
 
 <style>
   .product {
@@ -568,6 +639,40 @@
   if (!customElements.get('variant-selects')) {
     customElements.define('variant-selects', VariantSelects);
   }
+
+  class ComplementaryProducts extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+
+        fetch(this.dataset.url)
+          .then(response => response.text())
+          .then(text => {
+            const html = document.createElement('div');
+            html.innerHTML = text;
+            const recommendations = html.querySelector('complementary-products');
+
+            if (recommendations && recommendations.innerHTML.trim().length) {
+              this.innerHTML = recommendations.innerHTML;
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 400px 0px'}).observe(this);
+    }
+  }
+
+  if (!customElements.get('complementary-products')) {
+    customElements.define('complementary-products', ComplementaryProducts);
+  }
 </script>
 
 {% schema %}
@@ -643,6 +748,50 @@
           "id": "show_dynamic_checkout",
           "default": true,
           "label": "Show dynamic checkout buttons"
+        }
+      ]
+    },
+    {
+      "type": "complementary-products",
+      "name": "Complementary products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Pairs well with",
+          "label": "Heading"
+        },
+        {
+          "type": "range",
+          "id": "product_list_limit",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 3,
+          "label": "Maximum products to show"
+        }
+      ]
+    },
+    {
+      "type": "complementary-products",
+      "name": "Complementary products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Pairs well with",
+          "label": "Heading"
+        },
+        {
+          "type": "range",
+          "id": "product_list_limit",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 3,
+          "label": "Maximum products to show"
         }
       ]
     },

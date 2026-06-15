@@ -32,8 +32,15 @@
             autocomplete="email"
             placeholder="Your email address"
             required
+            {% if form.errors %}
+              autofocus
+              aria-invalid="true"
+              aria-describedby="Newsletter-error--{{ section.id }}"
+            {% elsif form.posted_successfully? %}
+              aria-describedby="Newsletter-success--{{ section.id }}"
+            {% endif %}
           >
-          <button type="submit" class="button" name="commit">
+          <button type="submit" class="button" name="commit" aria-label="{{ section.settings.button_label | escape }}">
             {{ section.settings.button_label | escape }}
           </button>
         </div>

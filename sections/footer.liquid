@@ -51,8 +51,15 @@
               autocomplete="email"
               placeholder="Email address"
               required
+              {% if form.errors %}
+                autofocus
+                aria-invalid="true"
+                aria-describedby="FooterNewsletter-error"
+              {% elsif form.posted_successfully? %}
+                aria-describedby="FooterNewsletter-success"
+              {% endif %}
             >
-            <button type="submit" class="button" name="commit" id="Subscribe">
+            <button type="submit" class="button" name="commit" id="Subscribe" aria-label="Subscribe">
               Subscribe
             </button>
           </div>
@@ -244,9 +251,19 @@
     padding: 0.5rem 0;
     text-decoration: none;
     color: inherit;
+    word-break: break-word; /* Handle long navigation links */
   }
-  .footer__menu-item:hover {
+  .footer__menu-item:hover, .footer__menu-item:focus-visible {
     text-decoration: underline;
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
+  }
+  .footer__block-heading {
+    word-break: break-word;
+  }
+  .link:focus-visible, .button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
   }
   .footer__newsletter-wrapper {
     display: flex;
@@ -335,6 +352,7 @@
 {% schema %}
 {
   "name": "Footer",
+  "max_blocks": 5,
   "settings": [
     {
       "type": "select",
