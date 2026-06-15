@@ -87,6 +87,7 @@
               <img srcset="{{ section.settings.logo | image_url: width: section.settings.logo_width }} 1x, {{ section.settings.logo | image_url: width: section.settings.logo_width, scale: 2 }} 2x"
                 src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}"
                 loading="eager"
+                fetchpriority="high"
                 width="{{ section.settings.logo_width }}"
                 height="{{ logo_height }}"
                 alt="{{ section.settings.logo.alt | default: shop.name | escape }}"

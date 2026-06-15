@@ -5,8 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="{{ settings.color_linen_bg }}">
-  <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-  
   {% render 'seo' %}
   
   {{ content_for_header }}
@@ -48,8 +46,8 @@
     }
   </style>
   
-  {{ 'base.css' | asset_url | stylesheet_tag }}
-  {{ 'animations.css' | asset_url | stylesheet_tag }}
+  {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'animations.css' | asset_url | stylesheet_tag: preload: true }}
   
   <script src="{{ 'base.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>

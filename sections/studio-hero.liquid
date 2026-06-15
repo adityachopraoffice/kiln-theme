@@ -2,7 +2,8 @@
   {%- if section.settings.image != blank -%}
     <div class="studio-hero__media">
       {{ section.settings.image | image_url: width: 3840 | image_tag:
-        loading: 'lazy',
+        loading: 'eager',
+        fetchpriority: 'high',
         width: section.settings.image.width,
         height: section.settings.image.height,
         sizes: '100vw',
@@ -14,6 +15,7 @@
     <div class="studio-hero__media">
       <img src="{{ 'hero_banner.png' | asset_url }}"
         loading="eager"
+        fetchpriority="high"
         alt="Artisanal hero banner"
         width="2000" height="1200"
       >
