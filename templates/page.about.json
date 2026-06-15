@@ -3,14 +3,31 @@
     "main": {
       "type": "main-page",
       "settings": {
+        "show_title": false,
         "color_scheme": "linen"
       }
     },
     "studio_hero": {
       "type": "studio-hero",
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "heading": "The Heart of the Kiln"
+          }
+        },
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Where earth meets fire. Located in the quiet outskirts of the city, our studio is a sanctuary of slow living and intentional design. It is here that raw clay is shaped by human hands, transforming simple elements into timeless artifacts for your home. We believe in the beauty of imperfection and the unique soul that only handmade goods possess.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_1",
+        "text_1"
+      ],
       "settings": {
-        "heading": "The Heart of the Kiln",
-        "text": "<p>Where earth meets fire. Located in the quiet outskirts of the city, our studio is a sanctuary of slow living and intentional design. It is here that raw clay is shaped by human hands, transforming simple elements into timeless artifacts for your home. We believe in the beauty of imperfection and the unique soul that only handmade goods possess.</p>",
         "color_scheme": "clay"
       }
     },
@@ -111,8 +128,8 @@
     }
   },
   "order": [
-    "main",
     "studio_hero",
+    "main",
     "origin_timeline",
     "process_steps",
     "material_spotlight"

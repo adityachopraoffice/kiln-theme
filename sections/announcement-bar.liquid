@@ -12,7 +12,7 @@
       </a>
     {%- endif -%}
     {%- if section.settings.dismissible -%}
-      <button type="button" class="announcement-bar__close" aria-label="{{ 'accessibility.close' | t }}">
+      <button type="button" class="announcement-bar__close" aria-label="{{ 'accessibility.close' | t }}" onclick="this.closest('.announcement-bar').style.display='none'">
         <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-close" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
       </button>
     {%- endif -%}
@@ -44,23 +44,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 11;
     }
   </style>
-
-  {%- if section.settings.dismissible -%}
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const announcementBar = document.querySelector('.announcement-bar');
-        const closeBtn = announcementBar?.querySelector('.announcement-bar__close');
-        
-        if (closeBtn && announcementBar) {
-          closeBtn.addEventListener('click', () => {
-            announcementBar.style.display = 'none';
-          });
-        }
-      });
-    </script>
-  {%- endif -%}
 {%- endif -%}
 
 {% schema %}
