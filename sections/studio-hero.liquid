@@ -4,6 +4,7 @@
       {{ section.settings.image | image_url: width: 3840 | image_tag:
         loading: 'eager',
         fetchpriority: 'high',
+        preload: true,
         width: section.settings.image.width,
         height: section.settings.image.height,
         sizes: '100vw',
@@ -13,18 +14,20 @@
     </div>
   {%- else -%}
     <div class="studio-hero__media">
-      <img src="{{ 'hero_banner.png' | asset_url }}"
-        loading="eager"
-        fetchpriority="high"
-        alt="Artisanal hero banner"
-        width="2000" height="1200"
-      >
+      {{ 'hero_banner.png' | asset_url | image_tag:
+        loading: 'eager',
+        fetchpriority: 'high',
+        preload: true,
+        alt: 'Artisanal hero banner',
+        width: 2000,
+        height: 1200
+      }}
       <div class="studio-hero__overlay" style="opacity: 0.1"></div>
     </div>
   {%- endif -%}
 
   <div class="studio-hero__content page-width">
-    <div class="studio-hero__text-box animate-on-scroll">
+    <div class="studio-hero__text-box">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when 'heading' -%}
