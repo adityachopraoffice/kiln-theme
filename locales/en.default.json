@@ -162,7 +162,8 @@
         "check_other_stores": "Check availability at other stores",
         "refresh": "Refresh",
         "pick_up_available": "Pickup available",
-        "pick_up_unavailable": "Pickup currently unavailable"
+        "pick_up_unavailable": "Pickup currently unavailable at {{ location_name }}",
+        "pick_up_time": "Usually ready in {{ pick_up_time }}"
       },
       "small_batch": "Small Batch",
       "made_to_order": "Made to Order",
@@ -170,7 +171,17 @@
       "about_this_batch": "About this batch",
       "care_instructions": "Care instructions",
       "materials": "Materials",
-      "taxes_inclusive": "Tax included."
+      "taxes_inclusive": "Tax included.",
+      "purchase_options": "Purchase options",
+      "one_time_purchase": "One-time purchase",
+      "batch_label": "Batch: ",
+      "recipient": {
+        "checkbox": "I want to send this as a gift",
+        "email_label": "Recipient email",
+        "name_label": "Recipient name (Optional)",
+        "message_label": "Message (Optional)",
+        "send_on_label": "Send on (Optional)"
+      }
     }
   },
   "sections": {

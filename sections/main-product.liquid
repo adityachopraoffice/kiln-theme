@@ -54,7 +54,7 @@
                 {%- render 'price', product: product, use_variant: true -%}
                 {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
                   <div class="product__unit-price caption" style="margin-top: 0.5rem; color: rgba(var(--color-foreground), 0.7);">
-                    <span class="visually-hidden">Unit price</span>
+                    <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
                     <span>
                       {{- product.selected_or_first_available_variant.unit_price | money -}}
                       <span aria-hidden="true">/</span>
@@ -67,7 +67,7 @@
                   </div>
                 {%- endif -%}
                 {%- if cart.taxes_included -%}
-                  <div class="product__tax caption">Tax included.</div>
+                  <div class="product__tax caption">{{ 'products.product.taxes_inclusive' | t }}</div>
                 {%- endif -%}
               </div>
               
@@ -158,9 +158,9 @@
                   
                   {%- if product.selling_plan_groups.size > 0 -%}
                     <div class="product-form__selling-plans" style="margin-top: 1rem;">
-                      <label class="form__label" for="SellingPlan-{{ section.id }}">Purchase options</label>
+                      <label class="form__label" for="SellingPlan-{{ section.id }}">{{ 'products.product.purchase_options' | t }}</label>
                       <select name="selling_plan" id="SellingPlan-{{ section.id }}" class="field__input" style="width: 100%;">
-                        <option value="">One-time purchase</option>
+                        <option value="">{{ 'products.product.one_time_purchase' | t }}</option>
                         {%- for group in product.selling_plan_groups -%}
                           <optgroup label="{{ group.name }}">
                             {%- for plan in group.selling_plans -%}
@@ -240,24 +240,24 @@
                     <summary style="cursor: pointer;">
                       <h3 style="margin: 0; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;">
                         <input type="checkbox" name="properties[__shopify_send_gift_card_to_recipient]" value="true" id="Recipient-Checkbox-{{ section.id }}" form="product-form-{{ section.id }}">
-                        <label for="Recipient-Checkbox-{{ section.id }}" style="cursor:pointer;">I want to send this as a gift</label>
+                        <label for="Recipient-Checkbox-{{ section.id }}" style="cursor:pointer;">{{ 'products.product.recipient.checkbox' | t }}</label>
                       </h3>
                     </summary>
                     <div class="recipient-fields" style="padding: 1rem 0; display: flex; flex-direction: column; gap: 1rem;">
                       <div class="field">
-                        <label for="Recipient-email-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">Recipient email</label>
+                        <label for="Recipient-email-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">{{ 'products.product.recipient.email_label' | t }}</label>
                         <input type="email" id="Recipient-email-{{ section.id }}" name="properties[Recipient email]" class="field__input" style="width:100%; padding:0.5rem; border:1px solid rgba(var(--color-foreground),0.2);" form="product-form-{{ section.id }}">
                       </div>
                       <div class="field">
-                        <label for="Recipient-name-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">Recipient name (Optional)</label>
+                        <label for="Recipient-name-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">{{ 'products.product.recipient.name_label' | t }}</label>
                         <input type="text" id="Recipient-name-{{ section.id }}" name="properties[Recipient name]" class="field__input" style="width:100%; padding:0.5rem; border:1px solid rgba(var(--color-foreground),0.2);" form="product-form-{{ section.id }}">
                       </div>
                       <div class="field">
-                        <label for="Recipient-message-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">Message (Optional)</label>
+                        <label for="Recipient-message-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">{{ 'products.product.recipient.message_label' | t }}</label>
                         <textarea id="Recipient-message-{{ section.id }}" name="properties[Message]" class="field__input" style="width:100%; padding:0.5rem; border:1px solid rgba(var(--color-foreground),0.2);" form="product-form-{{ section.id }}"></textarea>
                       </div>
                       <div class="field">
-                        <label for="Recipient-send-on-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">Send on (Optional)</label>
+                        <label for="Recipient-send-on-{{ section.id }}" style="display:block; margin-bottom:0.5rem;">{{ 'products.product.recipient.send_on_label' | t }}</label>
                         <input type="date" id="Recipient-send-on-{{ section.id }}" name="properties[Send on]" class="field__input" pattern="\d{4}-\d{2}-\d{2}" style="width:100%; padding:0.5rem; border:1px solid rgba(var(--color-foreground),0.2);" form="product-form-{{ section.id }}">
                       </div>
                     </div>
@@ -274,12 +274,12 @@
                     {%- if closest_location.available -%}
                       <p class="caption-large" style="margin-bottom:0;">
                         <svg viewBox="0 0 20 20" class="icon icon-checkmark" fill="none" width="14" height="14" style="margin-right: 0.5rem;"><path d="M14.28 5.72a.75.75 0 010 1.06l-6.5 6.5a.75.75 0 01-1.06 0l-3-3a.75.75 0 111.06-1.06l2.47 2.47 5.97-5.97a.75.75 0 011.06 0z" fill="currentColor"/></svg>
-                        Pickup available at <strong>{{ closest_location.location.name }}</strong>
+                        <strong>{{ 'products.product.pickup_availability.title' | t: location_name: closest_location.location.name }}</strong>
                       </p>
-                      <small class="caption" style="display:block; margin-top:0.2rem; color:rgba(var(--color-foreground),0.7);">Usually ready in {{ closest_location.pick_up_time }}</small>
+                      <small class="caption" style="display:block; margin-top:0.2rem; color:rgba(var(--color-foreground),0.7);">{{ 'products.product.pickup_availability.pick_up_time' | t: pick_up_time: closest_location.pick_up_time }}</small>
                     {%- else -%}
                       <p class="caption-large" style="margin-bottom:0;">
-                        Pickup currently unavailable at <strong>{{ closest_location.location.name }}</strong>
+                        <strong>{{ 'products.product.pickup_availability.pick_up_unavailable' | t: location_name: closest_location.location.name }}</strong>
                       </p>
                     {%- endif -%}
                   </div>
@@ -305,7 +305,7 @@
                     <summary>
                       <h3>{{ 'products.product.about_this_batch' | t }}</h3>
                       {%- if block.settings.batch_number != blank -%}
-                        <span>Batch: {{ block.settings.batch_number }}</span>
+                        <span>{{ 'products.product.batch_label' | t }}{{ block.settings.batch_number }}</span>
                       {%- endif -%}
                     </summary>
                     <div class="rte">{{ block.settings.text }}</div>
