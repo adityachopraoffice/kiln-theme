@@ -97,8 +97,16 @@
       </div>
       
       <div class="collection-toolbar__view">
-        <button type="button" class="view-toggle" data-view="grid" aria-label="Grid view">Grid</button>
-        <button type="button" class="view-toggle" data-view="list" aria-label="List view">List</button>
+        <button type="button" class="view-toggle is-active" data-view="grid" aria-label="Grid view" title="Grid view">
+          <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-grid" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>
+          </svg>
+        </button>
+        <button type="button" class="view-toggle" data-view="list" aria-label="List view" title="List view">
+          <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-list" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M3 4h4v4H3zm6 1h12v2H9zm-6 5h4v4H3zm6 1h12v2H9zm-6 5h4v4H3zm6 1h12v2H9z"/>
+          </svg>
+        </button>
       </div>
     </form>
 
@@ -267,8 +275,17 @@
     border: none;
     color: inherit;
     cursor: pointer;
-    text-decoration: underline;
-    margin-left: 1rem;
+    margin-left: 0.5rem;
+    padding: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+    transition: opacity 0.2s ease;
+  }
+  .collection-toolbar__view button:hover,
+  .collection-toolbar__view button.is-active {
+    opacity: 1;
   }
   
   .collection-grid {
@@ -431,6 +448,10 @@
     button.addEventListener('click', function() {
       const view = this.dataset.view;
       const grid = document.getElementById('ProductGridContainer');
+      
+      document.querySelectorAll('.view-toggle').forEach(b => b.classList.remove('is-active'));
+      this.classList.add('is-active');
+
       if (view === 'list') {
         grid.classList.add('collection-list-view');
         grid.classList.remove('collection-grid');
