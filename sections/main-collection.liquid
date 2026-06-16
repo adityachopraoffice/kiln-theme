@@ -321,7 +321,10 @@
   @media screen and (max-width: 749px) {
     .collection-list-view .product-card {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
+    }
+    .collection-list-view .product-card > a {
+      width: 100%;
     }
     .collection-list-view .product-card__image-wrapper {
       width: 100%;
