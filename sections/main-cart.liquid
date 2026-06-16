@@ -339,26 +339,78 @@
 </style>
 
 <script>
-  document.querySelectorAll('.quantity-input__button').forEach((btn) => {
-    btn.addEventListener('click', function() {
-      const input = this.parentElement.querySelector('.quantity-input__input');
-      let value = parseInt(input.value, 10);
+  document.addEventListener('click', function(event) {
+    const btn = event.target.closest('.cart .quantity-input__button');
+    if (btn) {
+      event.preventDefault();
+      const input = btn.parentElement.querySelector('.quantity-input__input');
+      const previousValue = parseInt(input.value, 10);
+      let value = previousValue;
       const max = input.hasAttribute('max') ? parseInt(input.getAttribute('max'), 10) : Infinity;
-      if (this.name === 'plus') {
+      if (btn.name === 'plus') {
         value = Math.min(value + 1, max);
       } else {
         value = Math.max(0, value - 1);
       }
-      input.value = value;
-      document.getElementById('cart').submit();
-    });
+      if (value !== previousValue) {
+        input.value = value;
+        updateCartItem(input.dataset.index, value);
+      }
+    }
   });
-  
-  document.querySelectorAll('.quantity-input__input').forEach((input) => {
-    input.addEventListener('change', function() {
-      document.getElementById('cart').submit();
-    });
+
+  document.addEventListener('change', function(event) {
+    if (event.target.matches('.cart .quantity-input__input')) {
+      updateCartItem(event.target.dataset.index, event.target.value);
+    }
   });
+
+  function updateCartItem(line, quantity) {
+    const cartElement = document.querySelector('.cart');
+    if (cartElement) cartElement.style.opacity = '0.5';
+    cartElement.style.pointerEvents = 'none';
+
+    fetch('/cart/change.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        line: line,
+        quantity: quantity,
+        sections: 'main-cart',
+        sections_url: window.location.pathname
+      })
+    })
+    .then(response => response.json())
+    .then(state => {
+      const parsedHTML = new DOMParser().parseFromString(state.sections['main-cart'], 'text/html');
+      const newCart = parsedHTML.querySelector('.cart');
+      if (newCart && cartElement) {
+        cartElement.innerHTML = newCart.innerHTML;
+      }
+      
+      // Also silently update the header cart bubble
+      fetch(window.location.pathname)
+        .then(res => res.text())
+        .then(html => {
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const newBubble = doc.getElementById('cart-icon-bubble');
+          const oldBubble = document.getElementById('cart-icon-bubble');
+          if (newBubble && oldBubble) {
+            oldBubble.innerHTML = newBubble.innerHTML;
+          }
+        });
+    })
+    .catch(error => console.error('Error updating cart:', error))
+    .finally(() => {
+      if (cartElement) {
+        cartElement.style.opacity = '1';
+        cartElement.style.pointerEvents = 'auto';
+      }
+    });
+  }
 </script>
 
 {% schema %}
