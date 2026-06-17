@@ -2,7 +2,7 @@
   <h1>{{ 'customer.account.title' | t | default: 'Account' }}</h1>
   <a href="{{ routes.account_logout_url }}">{{ 'customer.log_out' | t | default: 'Log out' }}</a>
   <div style="margin-top: 2rem;">
-    <h2>{{ 'customer.orders.title' | t | default: 'Order history' }}</h2>
+    <h2>{{ 'customer.account.order_history.title' | t | default: 'Order history' }}</h2>
     {% paginate customer.orders by 20 %}
       {%- if customer.orders.size > 0 -%}
         <table style="width:100%; text-align:left;">

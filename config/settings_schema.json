@@ -190,5 +190,60 @@
         "default": "drawer"
       }
     ]
+  },
+  {
+    "name": "Animations",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_animations",
+        "label": "Enable animations",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "animation_effect",
+        "label": "Animation style",
+        "options": [
+          {
+            "value": "slide-up",
+            "label": "Slide up"
+          },
+          {
+            "value": "fade",
+            "label": "Fade in"
+          },
+          {
+            "value": "zoom-in",
+            "label": "Zoom in"
+          },
+          {
+            "value": "slide-sides",
+            "label": "Slide in from sides"
+          }
+        ],
+        "default": "slide-up"
+      },
+      {
+        "type": "select",
+        "id": "animation_speed",
+        "label": "Animation speed",
+        "options": [
+          {
+            "value": "fast",
+            "label": "Snappy (0.4s)"
+          },
+          {
+            "value": "medium",
+            "label": "Fluid (0.8s)"
+          },
+          {
+            "value": "slow",
+            "label": "Slow (1.2s)"
+          }
+        ],
+        "default": "medium"
+      }
+    ]
   }
 ]

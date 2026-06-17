@@ -89,6 +89,10 @@ img {
   border: 0;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .skip-to-content-link {
   position: absolute;
   z-index: 9999;
@@ -103,6 +107,37 @@ img {
 
 .skip-to-content-link:focus {
   transform: translateY(0);
+}
+
+/* Facet & Filter Styles */
+.facets__summary, 
+.facets__summary-inner {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.facets__summary::-webkit-details-marker,
+.facets__summary-inner::-webkit-details-marker {
+  display: none;
+}
+.facets__disclosure,
+.facets__disclosure-inner {
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+}
+.facets__display-inner {
+  padding-bottom: 1rem;
+}
+.facets__price input[type="number"] {
+  -moz-appearance: textfield;
+}
+.facets__price input[type="number"]::-webkit-outer-spin-button,
+.facets__price input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 *:focus-visible {

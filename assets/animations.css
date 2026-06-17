@@ -1,25 +1,62 @@
 /* ============================================================================
-  Scroll Reveal Animations
+  Scroll Reveal Animations (Advanced & Configurable)
 ============================================================================== */
 
 /* Base class applied to elements we want to animate */
 .animate-on-scroll {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: var(--animation-initial-transform);
+  transition: opacity var(--animation-duration) var(--animation-easing),
+              transform var(--animation-duration) var(--animation-easing);
   will-change: opacity, transform;
 }
 
-/* Stagger delays if needed */
-.animate-on-scroll.delay-1 { transition-delay: 0.1s; }
-.animate-on-scroll.delay-2 { transition-delay: 0.2s; }
-.animate-on-scroll.delay-3 { transition-delay: 0.3s; }
+/* Stagger delays - dynamically calculated using CSS variables */
+.animate-on-scroll.delay-1 { transition-delay: calc(var(--animation-duration) * 0.15); }
+.animate-on-scroll.delay-2 { transition-delay: calc(var(--animation-duration) * 0.3); }
+.animate-on-scroll.delay-3 { transition-delay: calc(var(--animation-duration) * 0.45); }
+.animate-on-scroll.delay-4 { transition-delay: calc(var(--animation-duration) * 0.6); }
+.animate-on-scroll.delay-5 { transition-delay: calc(var(--animation-duration) * 0.75); }
 
-/* The class added by JS when the element enters the viewport */
+/* The class added by JS when the element enters the viewport or on page load */
 .animate-on-scroll.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1) translateX(0);
+}
+
+/* Specific direction override classes */
+.animate-on-scroll.anim-fade-only {
+  transform: none;
+}
+.animate-on-scroll.anim-slide-left {
+  transform: translateX(40px);
+}
+.animate-on-scroll.anim-slide-right {
+  transform: translateX(-40px);
+}
+.animate-on-scroll.anim-zoom-in {
+  transform: scale(0.94);
+}
+.animate-on-scroll.anim-slide-down {
+  transform: translateY(-40px);
+}
+
+.animate-on-scroll.anim-fade-only.is-visible,
+.animate-on-scroll.anim-slide-left.is-visible,
+.animate-on-scroll.anim-slide-right.is-visible,
+.animate-on-scroll.anim-zoom-in.is-visible,
+.animate-on-scroll.anim-slide-down.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1) translateX(0);
+}
+
+/* If animations are globally disabled in theme settings, force them to show instantly */
+@media screen {
+  body[style*="--animations-enabled: 0"] .animate-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 /* Fallback for users who prefer reduced motion */
@@ -28,5 +65,265 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+}
+
+
+/* ============================================================================
+  Interactive Micro-Animations
+============================================================================== */
+
+/* Header Nav Menu Underline Animation */
+.header__menu-item span {
+  position: relative;
+  display: inline-block;
+  padding: 0.2rem 0;
+}
+
+.header__menu-item span::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-foreground);
+  transform-origin: bottom right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.header__menu-item:hover span::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.header__active-menu-item {
+  position: relative;
+}
+
+.header__active-menu-item::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-foreground);
+}
+
+
+/* Dropdown disclosure/details open fade-in */
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+details[open] > .header__submenu {
+  animation: menuFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+details[open] > .header__mega-menu {
+  animation: menuFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
+/* Product Card Hover Zoom & Elegant Slide-up Lift */
+.product-card {
+  transition: transform 0.4s var(--animation-easing);
+  will-change: transform;
+}
+
+.product-card__image-wrapper {
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  transition: box-shadow 0.4s var(--animation-easing);
+  will-change: box-shadow;
+}
+
+.product-card__image {
+  transition: transform 0.6s var(--animation-easing) !important;
+  will-change: transform;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-card:hover .product-card__image-wrapper {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.product-card:hover .product-card__image {
+  transform: scale(1.04);
+}
+
+
+/* Button Scale & Shadow Bloom on Hover */
+.button, .button--secondary, .quick-add-button {
+  transition: transform 0.4s var(--animation-easing),
+              box-shadow 0.4s var(--animation-easing),
+              background-color 0.4s var(--animation-easing),
+              border-color 0.4s var(--animation-easing),
+              color 0.4s var(--animation-easing),
+              opacity 0.4s var(--animation-easing) !important;
+  will-change: transform, box-shadow;
+}
+
+.button:hover, .button--secondary:hover, .quick-add-button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  opacity: 1 !important;
+}
+
+.button:active, .button--secondary:active, .quick-add-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+/* ============================================================================
+  Theme Preloader (Page Entrance Reveal)
+============================================================================== */
+.theme-preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-background);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1),
+              visibility 0.8s ease;
+  will-change: transform;
+}
+
+.theme-preloader__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.theme-preloader__logo {
+  font-family: var(--font-heading-family);
+  font-size: 2.5rem;
+  color: var(--color-foreground);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: preloaderLogoFade 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+.theme-preloader__line-wrapper {
+  width: 120px;
+  height: 2px;
+  background-color: color-mix(in srgb, var(--color-foreground) 10%, transparent);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.theme-preloader__line {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-foreground);
+  transform: translateX(-100%);
+  animation: preloaderLineLoad 1.2s cubic-bezier(0.85, 0, 0.15, 1) 0.4s forwards;
+}
+
+@keyframes preloaderLogoFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes preloaderLineLoad {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Preloader hiding state */
+.theme-preloader--hidden {
+  transform: translateY(-100%);
+  visibility: hidden;
+}
+
+
+/* ============================================================================
+  Custom Cursor Follower
+============================================================================== */
+@media (pointer: fine) {
+  .custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10000;
+  }
+
+  .custom-cursor__dot {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background-color: var(--color-foreground);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 10002;
+    opacity: 0.3; /* Soft trailing point, does not compete with system cursor */
+    transition: transform 0.2s ease;
+  }
+
+  .custom-cursor__ring {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 10001;
+    opacity: 0.4; /* Delicate trailing circle */
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Hover states */
+  .custom-cursor--hover .custom-cursor__ring {
+    width: 46px;
+    height: 46px;
+    background-color: color-mix(in srgb, var(--color-foreground) 8%, transparent);
+    border-color: var(--color-foreground);
+    opacity: 0.8;
+  }
+
+  /* Click state */
+  .custom-cursor--click .custom-cursor__ring {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0;
+    transition: transform 0.22s ease-out, opacity 0.22s ease-out;
+  }
+}
+
+/* Hide on mobile/touch screens where mouse doesn't exist */
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
   }
 }

@@ -56,22 +56,57 @@
                           <span>{{ filter.label }}</span>
                         </summary>
                         <div class="facets__display-inner" style="margin-top: 0.5rem;">
-                          <ul class="facets__list list-unstyled" role="list">
-                            {%- for value in filter.values -%}
-                              <li class="list-menu__item facets__item">
-                                <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}" style="cursor: pointer;">
-                                    <input type="checkbox"
-                                      name="{{ value.param_name }}"
-                                      value="{{ value.value }}"
-                                      id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
-                                      {% if value.active %}checked{% endif %}
-                                      {% if value.count == 0 and value.active == false %}disabled{% endif %}
-                                    >
-                                  {{ value.label | escape }} ({{ value.count }})
-                                </label>
-                              </li>
-                            {%- endfor -%}
-                          </ul>
+                          {%- case filter.type -%}
+                            {%- when 'boolean' or 'list' -%}
+                              <ul class="facets__list list-unstyled" role="list">
+                                {%- for value in filter.values -%}
+                                  <li class="list-menu__item facets__item">
+                                    <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}" style="cursor: pointer;">
+                                        <input type="checkbox"
+                                          name="{{ value.param_name }}"
+                                          value="{{ value.value }}"
+                                          id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                          {% if value.active %}checked{% endif %}
+                                          {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                        >
+                                      {{ value.label | escape }} ({{ value.count }})
+                                    </label>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- when 'price_range' -%}
+                              <div class="facets__price" style="display: flex; gap: 1rem; align-items: flex-end; padding-top: 0.5rem;">
+                                <span class="field-currency" style="padding-bottom: 0.5rem;">{{ cart.currency.symbol }}</span>
+                                <div class="field" style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                  <label for="Filter-{{ filter.label | escape }}-GTE" style="font-size: 0.8rem;">From</label>
+                                  <input type="number"
+                                    name="{{ filter.min_value.param_name }}"
+                                    id="Filter-{{ filter.label | escape }}-GTE"
+                                    {% if filter.min_value.value %}
+                                      value="{{ filter.min_value.value | divided_by: 100 }}"
+                                    {% endif %}
+                                    placeholder="0"
+                                    min="0"
+                                    max="{{ filter.range_max | divided_by: 100 | ceil }}"
+                                    style="width: 80px; padding: 0.5rem; border: 1px solid rgba(var(--color-foreground), 0.2); background: transparent; color: inherit;"
+                                  >
+                                </div>
+                                <div class="field" style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                  <label for="Filter-{{ filter.label | escape }}-LTE" style="font-size: 0.8rem;">To</label>
+                                  <input type="number"
+                                    name="{{ filter.max_value.param_name }}"
+                                    id="Filter-{{ filter.label | escape }}-LTE"
+                                    {% if filter.max_value.value %}
+                                      value="{{ filter.max_value.value | divided_by: 100 }}"
+                                    {% endif %}
+                                    placeholder="{{ filter.range_max | divided_by: 100 | ceil }}"
+                                    min="0"
+                                    max="{{ filter.range_max | divided_by: 100 | ceil }}"
+                                    style="width: 80px; padding: 0.5rem; border: 1px solid rgba(var(--color-foreground), 0.2); background: transparent; color: inherit;"
+                                  >
+                                </div>
+                              </div>
+                          {%- endcase -%}
                         </div>
                       </details>
                     {%- endfor -%}

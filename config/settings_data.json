@@ -14,6 +14,9 @@
     "page_width": 1200,
     "section_spacing": 40,
     "cart_type": "drawer",
+    "enable_animations": true,
+    "animation_effect": "slide-up",
+    "animation_speed": "medium",
     "sections": {
       "footer": {
         "type": "footer",
@@ -70,7 +73,10 @@
       "type_body_font": "lato_n4",
       "page_width": 1200,
       "section_spacing": 40,
-      "cart_type": "drawer"
+      "cart_type": "drawer",
+      "enable_animations": true,
+      "animation_effect": "slide-up",
+      "animation_speed": "medium"
     }
   }
 }

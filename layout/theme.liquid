@@ -43,6 +43,12 @@
       
       --page-width: {{ settings.page_width }}px;
       --section-spacing: {{ settings.section_spacing }}px;
+
+      /* Dynamic Animation variables */
+      --animations-enabled: {% if settings.enable_animations %}1{% else %}0{% endif %};
+      --animation-duration: {% if settings.animation_speed == 'fast' %}0.4s{% elsif settings.animation_speed == 'slow' %}1.2s{% else %}0.8s{% endif %};
+      --animation-easing: cubic-bezier(0.16, 1, 0.3, 1);
+      --animation-initial-transform: {% if settings.animation_effect == 'fade' %}translateY(0) scale(1){% elsif settings.animation_effect == 'zoom-in' %}translateY(0) scale(0.95){% elsif settings.animation_effect == 'slide-sides' %}translateX(30px){% else %}translateY(30px) scale(1){% endif %};
     }
   </style>
   
@@ -54,6 +60,22 @@
   <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
 </head>
 <body class="color-scheme-{{ settings.default_color_scheme | default: 'linen' }}">
+  <!-- Elegant Page Preloader -->
+  <div class="theme-preloader" id="Preloader">
+    <div class="theme-preloader__content">
+      <span class="theme-preloader__logo h2">{{ shop.name }}</span>
+      <div class="theme-preloader__line-wrapper">
+        <div class="theme-preloader__line"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Cursor Follower -->
+  <div class="custom-cursor" aria-hidden="true">
+    <div class="custom-cursor__dot"></div>
+    <div class="custom-cursor__ring"></div>
+  </div>
+
   <a class="skip-to-content-link" href="#MainContent">
     {{ 'accessibility.skip_to_text' | t }}
   </a>
