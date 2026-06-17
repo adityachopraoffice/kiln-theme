@@ -110,37 +110,6 @@
                         </div>
                       </details>
                     {%- endfor -%}
-                    
-                    <details class="facets__disclosure-inner">
-                      <summary class="facets__summary-inner">
-                        <span>Price</span>
-                      </summary>
-                      <div class="facets__display-inner">
-                        <div class="facets__price" style="display: flex; gap: 1rem; align-items: flex-end; padding-top: 0.5rem;">
-                          <span class="field-currency" style="padding-bottom: 0.5rem;">{{ cart.currency.symbol }}</span>
-                          <div class="field" style="display: flex; flex-direction: column; gap: 0.3rem;">
-                            <label for="Filter-Search-Price-GTE" style="font-size: 0.8rem;">From</label>
-                            <input type="number"
-                              name="filter.v.price.gte"
-                              id="Filter-Search-Price-GTE"
-                              placeholder="0"
-                              min="0"
-                              style="width: 80px; padding: 0.5rem; border: 1px solid rgba(var(--color-foreground), 0.2); background: transparent; color: inherit;"
-                            >
-                          </div>
-                          <div class="field" style="display: flex; flex-direction: column; gap: 0.3rem;">
-                            <label for="Filter-Search-Price-LTE" style="font-size: 0.8rem;">To</label>
-                            <input type="number"
-                              name="filter.v.price.lte"
-                              id="Filter-Search-Price-LTE"
-                              placeholder="Any"
-                              min="0"
-                              style="width: 80px; padding: 0.5rem; border: 1px solid rgba(var(--color-foreground), 0.2); background: transparent; color: inherit;"
-                            >
-                          </div>
-                        </div>
-                      </div>
-                    </details>
                     <div style="width: 100%; margin-top: 1rem; border-top: 1px solid rgba(var(--color-foreground), 0.1); padding-top: 1rem;">
                       <button type="submit" class="button" style="width: 100%;">{{ 'general.search.apply_filters' | t }}</button>
                     </div>
