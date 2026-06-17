@@ -132,10 +132,12 @@ img {
   padding-bottom: 1rem;
 }
 .facets__price input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 .facets__price input[type="number"]::-webkit-outer-spin-button,
 .facets__price input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
   -webkit-appearance: none;
   margin: 0;
 }
