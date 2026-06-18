@@ -145,6 +145,35 @@ img {
   outline-offset: 2px;
 }
 
+/* Calm Water Ripple Animation */
+.calm-water-ripple {
+  position: fixed;
+  border: 2px solid var(--color-foreground);
+  border-radius: 50%;
+  pointer-events: none;
+  width: 150px;
+  height: 150px;
+  margin-left: -75px;
+  margin-top: -75px;
+  transform: scale(0);
+  opacity: 0.6;
+  animation: calm-ripple-anim 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+  z-index: 999999;
+}
+
+@keyframes calm-ripple-anim {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+    border-width: 6px;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
 .button {
   display: inline-flex;
   justify-content: center;
@@ -162,13 +191,38 @@ img {
   text-transform: uppercase;
   font-size: 0.9rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #d35400, #e67e22, #f39c12);
+  opacity: 0;
+  transition: opacity 0.8s ease; /* Slow kiln fire fade */
+  z-index: -1;
+  border-radius: inherit;
+  mix-blend-mode: screen;
 }
 
 .button:hover {
-  transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  background-color: var(--color-foreground);
-  opacity: 0.9;
+}
+
+.button:hover::before {
+  opacity: 0.25; /* Warm subtle glow fades in */
+}
+
+.button:active {
+  transform: scale(0.96); /* Heavy physical press */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s;
 }
 
 .button--secondary {
@@ -186,4 +240,40 @@ img {
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Cart Delivery Animation */
+.cart-delivery-animation {
+  position: fixed;
+  bottom: 30px;
+  left: -100px;
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(0);
+  color: var(--color-foreground);
+}
+
+.cart-delivery-animation.is-driving {
+  display: block;
+  animation: drive-cart-anim 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+@keyframes drive-cart-anim {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(10vw);
+  }
+  90% {
+    opacity: 1;
+    transform: translateX(90vw);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100vw) translateX(100px);
+  }
 }

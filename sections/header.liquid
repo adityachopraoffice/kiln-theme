@@ -194,19 +194,75 @@
         </ul>
       </nav>
 
+      <style>
+        .header__search-wrapper {
+          position: relative;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          border-bottom: 1px solid rgba(var(--color-foreground), 0.2);
+        }
+        
+        .header__search-input {
+          padding: 0.5rem 0;
+          border: none;
+          background: transparent;
+          color: inherit;
+          width: 100%;
+          outline: none;
+          box-shadow: none;
+        }
+
+        .header__search-input:focus,
+        .header__search-input:focus-visible {
+          outline: none !important;
+          box-shadow: none !important;
+        }
+
+        .header__search-line {
+          position: absolute;
+          bottom: -1px; /* Align precisely over the border */
+          left: 50%;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #d35400, #e67e22, #f39c12);
+          transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+          pointer-events: none;
+        }
+        
+        .header__search-input:focus ~ .header__search-line {
+          width: 100%;
+          left: 0;
+        }
+
+        .header__search-button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem;
+          color: inherit;
+          transition: transform 0.3s ease, color 0.3s ease;
+          outline: none;
+        }
+
+        .header__search-wrapper:hover .header__search-button {
+          transform: scale(1.1);
+          color: #e67e22;
+        }
+      </style>
       <predictive-search class="header__search">
         <form action="{{ routes.search_url }}" method="get" role="search" style="position: relative; width: 100%;">
-          <div style="display: flex; align-items: center; width: 100%;">
+          <div class="header__search-wrapper">
             <input type="search"
               class="header__search-input"
               name="q"
               value=""
               placeholder="Search"
               autocomplete="off"
-              style="padding: 0.5rem; border: 1px solid rgba(var(--color-foreground),0.2); background: transparent; color: inherit;"
             >
             <input type="hidden" name="options[prefix]" value="last">
-            <button aria-label="Search" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: inherit;">
+            <div class="header__search-line"></div>
+            <button class="header__search-button" aria-label="Search">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
@@ -300,6 +356,7 @@
   .header {
     padding: 1rem 0;
     border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    transition: padding 0.3s ease;
   }
   header-drawer {
     display: flex;
@@ -330,10 +387,30 @@
     height: auto;
     max-height: 150px; /* Prevent portrait logos from making header massive */
     object-fit: contain;
+    transition: max-height 0.3s ease;
   }
   .header__menu-item {
     word-break: break-word; /* Handle long menu titles */
+    text-decoration: none !important;
+    position: relative;
+    padding-bottom: 0.25rem;
+    transition: color 0.3s ease;
   }
+
+  .header__menu-item:hover,
+  .list-menu__item:hover {
+    text-decoration: none !important;
+  }
+
+  .header__icon {
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .header__icon:hover {
+    transform: scale(1.1);
+    color: #e67e22;
+  }
+
   .header__inline-menu {
     display: none;
   }
@@ -554,16 +631,26 @@
   }
 
   /* Sticky Header */
-  sticky-header {
-    display: block;
+  .shopify-section-group-header-group {
     position: sticky;
     top: 0;
     z-index: 250;
+  }
+  
+  sticky-header {
+    display: block;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     background-color: color-mix(in srgb, var(--color-background) 85%, transparent);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, padding 0.3s ease;
+  }
+
+  .shopify-section-header-shrunk {
+    padding: 0.3rem 0 !important;
+  }
+  .shopify-section-header-shrunk .header__heading-logo {
+    max-height: 60px !important;
   }
 </style>
 
@@ -694,21 +781,14 @@
 
       if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
 
-      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        if (this.preventHide) return;
-        requestAnimationFrame(this.hide.bind(this));
-      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        if (!this.preventReveal) {
-          requestAnimationFrame(this.reveal.bind(this));
-        } else {
-          window.clearTimeout(this.isScrolling);
-          this.isScrolling = setTimeout(() => {
-            this.preventReveal = false;
-          }, 66);
-          requestAnimationFrame(this.hide.bind(this));
-        }
+      if (scrollTop > this.headerBounds.bottom) {
+        requestAnimationFrame(() => {
+          this.header.classList.add('shopify-section-header-sticky', 'shopify-section-header-shrunk');
+        });
       } else if (scrollTop <= this.headerBounds.top) {
-        requestAnimationFrame(this.reset.bind(this));
+        requestAnimationFrame(() => {
+          this.header.classList.remove('shopify-section-header-sticky', 'shopify-section-header-shrunk');
+        });
       }
 
       this.currentScrollTop = scrollTop;

@@ -119,4 +119,44 @@ document.addEventListener('DOMContentLoaded', () => {
       cursor.classList.remove('custom-cursor--click');
     });
   }
+
+  // Calm Water Ripple Animation
+  document.addEventListener('click', function(e) {
+    // Don't ripple if clicking on interactive elements that already have feedback
+    if (e.target.closest('a, button, input, select, textarea, [role="button"], details summary')) {
+      return;
+    }
+    
+    const ripple = document.createElement('div');
+    ripple.className = 'calm-water-ripple';
+    
+    // Position the ripple at the exact click coordinates
+    ripple.style.left = e.clientX + 'px';
+    ripple.style.top = e.clientY + 'px';
+    
+    document.body.appendChild(ripple);
+    
+    // Remove the ripple element after the animation completes (0.8s)
+    setTimeout(() => {
+      ripple.remove();
+    }, 800);
+  });
+
+  // Add to Cart Delivery Animation
+  document.addEventListener('submit', function(e) {
+    if (e.target.action && e.target.action.includes('/cart/add')) {
+      const animationEl = document.getElementById('cart-delivery-animation');
+      if (animationEl) {
+        // Reset animation in case it's already running
+        animationEl.classList.remove('is-driving');
+        void animationEl.offsetWidth; // Trigger reflow to restart animation
+        animationEl.classList.add('is-driving');
+        
+        // Remove class after animation finishes
+        setTimeout(() => {
+          animationEl.classList.remove('is-driving');
+        }, 3000);
+      }
+    }
+  });
 });
