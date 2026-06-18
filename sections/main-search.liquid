@@ -10,23 +10,28 @@
       </h1>
 
       <div class="main-search__search-form">
-        <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
-          <div class="search-form__input-wrapper">
-            <input
-              class="search-form__input field__input"
-              type="search"
-              name="q"
-              value="{{ search.terms | escape }}"
-              placeholder="{{ 'general.search.search' | t }}"
-            >
-            <input type="hidden" name="options[prefix]" value="last">
-            <button class="search-form__button button" type="submit" aria-label="{{ 'general.search.search' | t }}">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" width="24" height="24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
-            </button>
-          </div>
-        </form>
+        <main-predictive-search style="display: block; position: relative;">
+          <form action="{{ routes.search_url }}" method="get" role="search" class="search-form" style="position: relative;">
+            <div class="search-form__input-wrapper">
+              <input
+                class="search-form__input field__input"
+                type="search"
+                name="q"
+                value="{{ search.terms | escape }}"
+                placeholder="{{ 'general.search.search' | t }}"
+                autocomplete="off"
+              >
+              <input type="hidden" name="options[prefix]" value="last">
+              <input type="hidden" name="type" value="product">
+              <button class="search-form__button button" type="submit" aria-label="{{ 'general.search.search' | t }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" width="24" height="24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </button>
+            </div>
+            <div class="predictive-search-dropdown" style="display: none; position: absolute; top: calc(100% + 0.5rem); left: 0; width: 100%; background-color: var(--color-background); border: 1px solid rgba(var(--color-foreground), 0.1); z-index: 10; text-align: left; border-radius: 4px; max-height: 400px; overflow-y: auto; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);"></div>
+          </form>
+        </main-predictive-search>
       </div>
     </div>
 
@@ -42,6 +47,7 @@
               <form id="FacetFiltersForm" class="search-toolbar__filters">
                 <input type="hidden" name="q" value="{{ search.terms | escape }}">
                 <input type="hidden" name="options[prefix]" value="last">
+                <input type="hidden" name="type" value="product">
                 <details class="facets__disclosure">
                   <summary class="facets__summary caption-large focus-offset" style="cursor: pointer; text-decoration: underline;">
                     <span>{{ 'general.search.filter_results' | t }}</span>
@@ -363,3 +369,79 @@
   ]
 }
 {% endschema %}
+
+<script>
+  class MainPredictiveSearch extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', this.init.bind(this));
+      } else {
+        this.init();
+      }
+    }
+
+    init() {
+      this.input = this.querySelector('input[type="search"]');
+      this.dropdown = this.querySelector('.predictive-search-dropdown');
+      
+      if (this.input) {
+        this.input.addEventListener('input', this.debounce(() => {
+          this.onChange();
+        }, 300));
+      }
+      
+      document.addEventListener('click', (event) => {
+        if (!this.contains(event.target)) {
+          this.close();
+        }
+      });
+    }
+
+    onChange() {
+      const searchTerm = this.input.value.trim();
+      if (!searchTerm.length) {
+        this.close();
+        return;
+      }
+      this.getSearchResults(searchTerm);
+    }
+
+    getSearchResults(searchTerm) {
+      fetch(`/search/suggest?q=${encodeURIComponent(searchTerm)}&resources[type]=product&resources[limit]=4&section_id=predictive-search`)
+        .then((response) => {
+          if (!response.ok) { throw new Error(response.status); }
+          return response.text();
+        })
+        .then((text) => {
+          const resultsMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-predictive-search').innerHTML;
+          this.dropdown.innerHTML = resultsMarkup;
+          this.open();
+        })
+        .catch((error) => {
+          this.close();
+        });
+    }
+
+    open() {
+      this.dropdown.style.display = 'block';
+    }
+
+    close() {
+      this.dropdown.style.display = 'none';
+    }
+
+    debounce(fn, wait) {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+  }
+
+  customElements.define('main-predictive-search', MainPredictiveSearch);
+</script>
