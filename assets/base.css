@@ -206,9 +206,10 @@ img {
   background: linear-gradient(45deg, #d35400, #e67e22, #f39c12);
   opacity: 0;
   transition: opacity 0.8s ease; /* Slow kiln fire fade */
-  z-index: -1;
   border-radius: inherit;
   mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .button:hover {
