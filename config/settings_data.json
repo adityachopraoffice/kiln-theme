@@ -59,7 +59,7 @@
     }
   },
   "presets": {
-    "Kiln": {
+    "Kiln V2": {
       "color_clay_bg": "#A65E44",
       "color_clay_text": "#FAF6F0",
       "color_linen_bg": "#FAF6F0",
